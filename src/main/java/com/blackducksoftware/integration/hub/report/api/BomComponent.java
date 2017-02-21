@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report;
+package com.blackducksoftware.integration.hub.report.api;
 
 public class BomComponent {
     private String policyStatus;

@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import com.blackducksoftware.integration.hub.report.api.ReportData;
 import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
 import com.google.gson.Gson;
 
