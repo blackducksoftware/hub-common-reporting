@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>hub-reporting-common</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>Hub Common</name>
   <url>https://github.com/blackducksoftware/hub-reporting-common</url>
