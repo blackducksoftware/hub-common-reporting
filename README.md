@@ -1,6 +1,8 @@
 ## Overview ##
 The hub-reporting-common library supplies convenient creation of Risk Report files.
 
+## Build ##
+
 ## Where can I get the latest release? ##
 You can download the latest release from Maven Central.
 
