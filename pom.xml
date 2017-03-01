@@ -12,12 +12,12 @@
   <version>1.0.1-SNAPSHOT</version>
 
   <name>Hub Common</name>
-  <url>https://github.com/blackducksoftware/hub-reporting-common</url>
+  <url>https://github.com/blackducksoftware/hub-common-reporting</url>
 
   <scm>
-    <connection>scm:git:git://github.com/blackducksoftware/hub-reporting-common.git/</connection>
-    <developerConnection>scm:git:git@github.com:blackducksoftware/hub-reporting-common.git</developerConnection>
-    <url>https://www.github.com/blackducksoftware/hub-reporting-common</url>
+    <connection>scm:git:git://github.com/blackducksoftware/hub-common-reporting.git/</connection>
+    <developerConnection>scm:git:git@github.com:blackducksoftware/hub-common-reporting.git</developerConnection>
+    <url>https://www.github.com/blackducksoftware/hub-common-reporting</url>
   </scm>
 
   <dependencies>
