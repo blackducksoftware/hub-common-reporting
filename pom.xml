@@ -8,7 +8,7 @@
     <version>2.2.5</version>
   </parent>
 
-  <artifactId>hub-reporting-common</artifactId>
+  <artifactId>hub-common-reporting</artifactId>
   <version>1.0.1-SNAPSHOT</version>
 
   <name>Hub Common</name>
