@@ -36,6 +36,11 @@
       <artifactId>gson</artifactId>
       <version>2.7</version>
     </dependency>
+    <dependency>
+      <groupId>com.planbase.pdf</groupId>
+      <artifactId>PdfLayoutManager</artifactId>
+      <version>0.5.1</version>
+    </dependency>
   </dependencies>
 
   <build>
