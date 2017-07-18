@@ -214,7 +214,7 @@ public class PDFBuilder {
 		ReportData report = new ReportData();
 		
 		BomComponent bc1 = new BomComponent();
-		bc1.setComponentName("Ari Kamen is my manager");
+		bc1.setComponentName("Manager Manager Manager");
 		bc1.setComponentVersion("mvnref-book-parent-0.2.1");
 		bc1.setLicense("BSD 3-clause New or Revised License");
 		bc1.setSecurityRiskHighCount(1);
@@ -231,7 +231,7 @@ public class PDFBuilder {
 		
 		
 		BomComponent bc2 = new BomComponent();
-		bc2.setComponentName("Eric Kerwin is also named Giggles");
+		bc2.setComponentName("ComponentName");
 		bc2.setComponentVersion("This is a super long version name");
 		bc2.setLicense("mit license mit license mit license mit license mit license mit license mit license mit license mit license mit license mit license");
 		bc2.setSecurityRiskHighCount(1);
