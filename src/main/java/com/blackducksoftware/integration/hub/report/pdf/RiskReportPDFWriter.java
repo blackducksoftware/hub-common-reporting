@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report.PDFBuilder;
+package com.blackducksoftware.integration.hub.report.pdf;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,6 +44,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 
 import com.blackducksoftware.integration.hub.report.api.BomComponent;
 import com.blackducksoftware.integration.hub.report.api.ReportData;
+import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
 import com.planbase.pdf.layoutmanager.BorderStyle;
 import com.planbase.pdf.layoutmanager.Cell;
 import com.planbase.pdf.layoutmanager.CellStyle;
@@ -66,8 +67,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 
-public class PDFBuilder {
-	
+public class RiskReportPDFWriter {
+
 	public float mainTitleFontSize = 20f;
 	public float cellTitleFontSize = 12f;
 	public float bodyFontSize = 10f;
@@ -81,55 +82,79 @@ public class PDFBuilder {
 	public PDType1Font bodyFont = PDType1Font.HELVETICA;
 	public float padding = 20f;
 
-	public void makePDF(ReportData report) throws IOException {	
-		PdfLayoutMgr pageMgr = PdfLayoutMgr.newRgbPageMgr();
-		LogicalPage lp = pageMgr.logicalPageStart();
-		
-		TableBuilder titleTable = lp.tableBuilder(XyOffset.of(0, lp.yPageTop()));
-		titleTable = titleTable(titleTable, report, lp.pageWidth());
-		XyOffset titleTableXYOffset = titleTable.buildTable();
-		
-		TableBuilder projectInformationTable = lp.tableBuilder(XyOffset.of(0, titleTableXYOffset.y() - padding / 2));
-		projectInformationTable = projectInformationTable(projectInformationTable, report);
-		XyOffset projectInformationTableXYOffset = projectInformationTable.buildTable();
-		
-		
-		float startingtb1X = (lp.pageWidth() / 2) - (((3 * (numberCellSize + headerCellSize)) + (2 * padding)) / 2);
-		float startingtb1Y = projectInformationTableXYOffset.y() - padding;
-		TableBuilder tb1 = lp.tableBuilder(XyOffset.of(startingtb1X, startingtb1Y));
-		tb1 = aggregateSecurityRiskTable(tb1, report);
-		XyOffset tb1XYOffset = tb1.buildTable();
+	public File createPDFReportFile( final File outputDirectory, final ReportData report) throws RiskReportException {
+		try {
+			String fileName = "test.pdf";
+			PdfLayoutMgr pageMgr = PdfLayoutMgr.newRgbPageMgr();
+			LogicalPage lp = pageMgr.logicalPageStart();
 
-		TableBuilder tb2 = lp.tableBuilder(XyOffset.of(tb1XYOffset.x() + padding, startingtb1Y));
-		tb2 = aggregateLicenseRiskTable(tb2, report);
-		XyOffset tb2XYOffset = tb2.buildTable();
+			TableBuilder titleTable = lp.tableBuilder(XyOffset.of(0, lp.yPageTop()));
+			titleTable = titleTable(titleTable, report, lp.pageWidth());
+			XyOffset titleTableXYOffset = titleTable.buildTable();
 
-		TableBuilder tb3 = lp.tableBuilder(XyOffset.of(tb2XYOffset.x() + padding, startingtb1Y));
-		tb3 = aggregateOperationalRiskTable(tb3, report);
-		XyOffset tb3XYOffset = tb3.buildTable();
+			TableBuilder projectInformationTable = lp.tableBuilder(XyOffset.of(0, titleTableXYOffset.y() - padding / 2));
+			projectInformationTable = projectInformationTable(projectInformationTable, report);
+			XyOffset projectInformationTableXYOffset = projectInformationTable.buildTable();
 
-		
-		float startingtb4X = (lp.pageWidth() / 2) - ((componentVersionCellSize + componentLicenseCellSize + componentNameCellSize + 5 * 50f) / 2);	
-		TableBuilder tb4 = lp.tableBuilder(XyOffset.of(startingtb4X, tb3XYOffset.y() - padding));
-		tb4 = componentTable(tb4, report);
-		XyOffset tb4XYOffset = tb4.buildTable();
+			float startingtb1X = (lp.pageWidth() / 2) - (((3 * (numberCellSize + headerCellSize)) + (2 * padding)) / 2);
+			float startingtb1Y = projectInformationTableXYOffset.y() - padding;
+			//security risk
+			TableBuilder securityRiskTableHeader = lp.tableBuilder(XyOffset.of(startingtb1X, startingtb1Y));
+			securityRiskTableHeader = aggregateSecurityRiskTableHeader(securityRiskTableHeader, report);
+			XyOffset securityRiskTableHeaderXYOffset = securityRiskTableHeader.buildTable();
 
-		lp.commit();
-		OutputStream os = new FileOutputStream("test.pdf");
-		pageMgr.save(os);
+			TableBuilder securityRiskTable = lp.tableBuilder(XyOffset.of(startingtb1X, securityRiskTableHeaderXYOffset.y()));
+			securityRiskTable = aggregateSecurityRiskTable(securityRiskTable, report);
+			XyOffset securityRiskTableXYOffset = securityRiskTable.buildTable();
+
+			//license risk
+			TableBuilder licenseRiskTableHeader = lp.tableBuilder(XyOffset.of(securityRiskTableXYOffset.x() + padding, startingtb1Y));
+			licenseRiskTableHeader = aggregateLicenseRiskTableHeader(licenseRiskTableHeader, report);
+			XyOffset licenseRiskTableHeaderXYOffset = licenseRiskTableHeader.buildTable();
+
+			TableBuilder licenseRiskTable = lp.tableBuilder(XyOffset.of(securityRiskTableXYOffset.x() + padding, licenseRiskTableHeaderXYOffset.y()));
+			licenseRiskTable = aggregateLicenseRiskTable(licenseRiskTable, report);
+			XyOffset licenseRiskTableXYOffset = licenseRiskTable.buildTable();
+
+			//operational risk
+			TableBuilder operationalRiskTableHeader = lp.tableBuilder(XyOffset.of(licenseRiskTableXYOffset.x() + padding, startingtb1Y));
+			operationalRiskTableHeader = aggregateOperationalRiskTableHeader(operationalRiskTableHeader, report);
+			XyOffset operationalRiskTableHeaderXYOffset = operationalRiskTableHeader.buildTable();
+
+			TableBuilder operationalRiskTable = lp.tableBuilder(XyOffset.of(licenseRiskTableXYOffset.x() + padding, operationalRiskTableHeaderXYOffset.y()));
+			operationalRiskTable = aggregateOperationalRiskTable(operationalRiskTable, report);
+			XyOffset tb3XYOffset = operationalRiskTable.buildTable();
+
+
+			float startingtb4X = (lp.pageWidth() / 2) - ((componentVersionCellSize + componentLicenseCellSize + componentNameCellSize + 5 * 50f) / 2);	
+			TableBuilder tb4 = lp.tableBuilder(XyOffset.of(startingtb4X, tb3XYOffset.y() - padding));
+			tb4 = componentTable(tb4, report);
+			XyOffset tb4XYOffset = tb4.buildTable();
+
+			lp.commit();
+			OutputStream os = new FileOutputStream(fileName);
+			pageMgr.save(os);
+
+			return new File(fileName);
+		} catch (final IOException e) {
+			throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);
+		}
+	}
+
+	public TableBuilder aggregateSecurityRiskTableHeader(TableBuilder tb, ReportData report ) {
+		tb.addCellWidths(vec(headerCellSize + numberCellSize))
+		//title rows
+		.textStyle(TextStyle.of(PDType1Font.HELVETICA_BOLD, cellTitleFontSize, BLACK))
+		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(DARK_GRAY)))
+		.rowBuilder()
+		.cellBuilder().align(MIDDLE_CENTER).addStrs("Security Risk").buildCell()
+		.buildRow()
+		.buildPart();
+		return tb;
 	}
 
 	public TableBuilder aggregateSecurityRiskTable(TableBuilder tb, ReportData report) {
-
 		tb.addCellWidths(vec(headerCellSize, numberCellSize))
-		//title rows
-		.textStyle(TextStyle.of(PDType1Font.HELVETICA_BOLD, cellTitleFontSize, BLACK))
-		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(WHITE)))
-		.rowBuilder()
-		.cellBuilder().align(MIDDLE_RIGHT).addStrs("Security").buildCell()
-		.cellBuilder().align(MIDDLE_LEFT).addStrs("Risk").buildCell()
-		.buildRow()
-		.buildPart()
 
 		//high risk row
 		.partBuilder().cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.of(2), bodyCellBackgroundColor, BorderStyle.of(DARK_GRAY)))
@@ -170,20 +195,24 @@ public class PDFBuilder {
 		return tb;
 	}
 
-	public TableBuilder aggregateLicenseRiskTable(TableBuilder tb, ReportData report) {
-		tb.addCellWidths(vec(headerCellSize, numberCellSize))
+	public TableBuilder aggregateLicenseRiskTableHeader(TableBuilder tb, ReportData report ) {
+		tb.addCellWidths(vec(headerCellSize + numberCellSize))
 		//title rows
 		.textStyle(TextStyle.of(PDType1Font.HELVETICA_BOLD, cellTitleFontSize, BLACK))
-		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(WHITE)))
+		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(DARK_GRAY)))
 		.rowBuilder()
-		.cellBuilder().align(MIDDLE_RIGHT).addStrs("License").buildCell()
-		.cellBuilder().align(MIDDLE_LEFT).addStrs("Risk").buildCell()
+		.cellBuilder().align(MIDDLE_CENTER).addStrs("License Risk").buildCell()
 		.buildRow()
-		.buildPart()
+		.buildPart();
+		return tb;
+	}
+
+	public TableBuilder aggregateLicenseRiskTable(TableBuilder tb, ReportData report) {
+		tb.addCellWidths(vec(headerCellSize, numberCellSize))
 
 		//high risk row
-		.partBuilder().cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.of(2), bodyCellBackgroundColor, BorderStyle.of(DARK_GRAY)))
 		.textStyle(TextStyle.of(bodyFont, bodyFontSize, bodyCellFontColor))
+		.partBuilder().cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.of(2), bodyCellBackgroundColor, BorderStyle.of(DARK_GRAY)))
 		.rowBuilder()
 		.cellBuilder().align(MIDDLE_CENTER).addStrs("High Risk").buildCell()
 		.cellBuilder().align(MIDDLE_CENTER).addStrs(report.getLicenseRiskHighCount()+"").buildCell()
@@ -220,17 +249,20 @@ public class PDFBuilder {
 		return tb;
 	}
 
-	public TableBuilder aggregateOperationalRiskTable(TableBuilder tb, ReportData report) {
-		tb.addCellWidths(vec(headerCellSize, numberCellSize))
-
+	public TableBuilder aggregateOperationalRiskTableHeader(TableBuilder tb, ReportData report ) {
+		tb.addCellWidths(vec(headerCellSize + numberCellSize))
 		//title rows
 		.textStyle(TextStyle.of(PDType1Font.HELVETICA_BOLD, cellTitleFontSize, BLACK))
-		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(WHITE)))
+		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(1), Color.WHITE, BorderStyle.of(DARK_GRAY)))
 		.rowBuilder()
-		.cellBuilder().align(MIDDLE_RIGHT).addStrs("Operational").buildCell()
-		.cellBuilder().align(MIDDLE_LEFT).addStrs("Risk").buildCell()
+		.cellBuilder().align(MIDDLE_CENTER).addStrs("Operational Risk").buildCell()
 		.buildRow()
-		.buildPart()
+		.buildPart();
+		return tb;
+	}
+
+	public TableBuilder aggregateOperationalRiskTable(TableBuilder tb, ReportData report) {
+		tb.addCellWidths(vec(headerCellSize, numberCellSize))
 
 		//high risk row
 		.partBuilder().cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.of(2), bodyCellBackgroundColor, BorderStyle.of(DARK_GRAY)))
@@ -286,12 +318,12 @@ public class PDFBuilder {
 		.cellBuilder().addStrs("Phase:    " + report.getPhase() + "    |    Distribution:    " + report.getDistribution()).buildCell()
 		.buildRow()
 		.buildPart();
-		
+
 		return tb;
 	}
-	
+
 	public TableBuilder titleTable(TableBuilder tb, ReportData report, float pageWidth) throws IOException {
-		
+
 		tb.addCellWidths(vec(pageWidth / 2, pageWidth / 2))
 		.textStyle(TextStyle.of(PDType1Font.HELVETICA_BOLD, mainTitleFontSize, WHITE))
 		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(2), Color.BLACK, BorderStyle.of(BLACK)))
@@ -300,15 +332,15 @@ public class PDFBuilder {
 		.cellBuilder().align(MIDDLE_RIGHT).add(ScaledPng.of(ImageIO.read(new File("src/main/resources/riskreport/web/images/Hub_BD_logo.png")), 203, 45)).buildCell()
 		.buildRow()
 		.buildPart();
-		
+
 		return tb;
 	}
-	
+
 	public TableBuilder componentTable(TableBuilder tb, ReportData report) {
 		float numberCellSize = 50f;
 
 		tb.addCellWidths(vec(componentNameCellSize, componentVersionCellSize, componentLicenseCellSize, numberCellSize, numberCellSize, numberCellSize, numberCellSize, numberCellSize));
-		
+
 		tb.textStyle(TextStyle.of(bodyFont, bodyFontSize, Color.BLACK))
 		.partBuilder().cellStyle(CellStyle.of(BOTTOM_CENTER, Padding.of(2), Color.WHITE, BorderStyle.of(WHITE)))
 		.rowBuilder().addTextCells("BOM Entries " + report.getTotalComponents()).buildRow()
@@ -331,7 +363,7 @@ public class PDFBuilder {
 			Color bodyCellBackgroundColor = (row) ? decode("#f9f9f9") : decode("#ffffff");
 			Color licRColor = (licR.equals("H")) ? decode("#b52b24") : (licR.equals("M")) ? decode("#eca4a0") : (licR.equals("L")) ? new Color(153,153,153) : bodyCellBackgroundColor;
 			Color optRColor = (optR.equals("H")) ? decode("#b52b24") : (optR.equals("M")) ? decode("#eca4a0") : (optR.equals("L")) ? new Color(153,153,153) : bodyCellBackgroundColor;
-			
+
 			tb.partBuilder().cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.of(2), bodyCellBackgroundColor, BorderStyle.of(DARK_GRAY)))
 			.textStyle(TextStyle.of(bodyFont, bodyFontSize, bodyCellFontColor))
 			.rowBuilder().cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(b.getComponentName())).buildCell()
@@ -350,9 +382,8 @@ public class PDFBuilder {
 		return tb;
 	}
 
-	
 
-	
+
 	public String licenseRisk(BomComponent b) {
 		if (b.getLicenseRiskHighCount() > 0) {
 			return "H";
@@ -379,7 +410,7 @@ public class PDFBuilder {
 
 	private static <T> List<T> vec(T... ts) { return Arrays.asList(ts); }
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws RiskReportException {
 		ReportData report = new ReportData();
 
 		BomComponent bc1 = new BomComponent();
@@ -425,8 +456,8 @@ public class PDFBuilder {
 		report.setProjectName("This is the Project Name");
 		report.setProjectVersion("1.0.0");
 
-		PDFBuilder builder = new PDFBuilder();
-		builder.makePDF(report);
+		RiskReportPDFWriter builder = new RiskReportPDFWriter();
+		builder.createPDFReportFile(new File("."), report);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.blackducksoftware.integration.hub.report.PDFBuilder;
+package com.blackducksoftware.integration.hub.report.pdf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
