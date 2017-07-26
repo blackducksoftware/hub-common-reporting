@@ -23,12 +23,12 @@
  */
 package com.blackducksoftware.integration.hub.report.api;
 
+import java.util.List;
+
 public class BomComponent {
     private String policyStatus;
 
-    private String policyRuleName;
-
-    private String policyRuleDescription;
+    private List<PolicyRule> policyRulesViolated;
 
     private String componentName;
 
@@ -66,20 +66,12 @@ public class BomComponent {
         this.policyStatus = policyStatus;
     }
 
-    public String getPolicyRuleName() {
-        return policyRuleName;
+    public List<PolicyRule> getPolicyRulesViolated() {
+        return policyRulesViolated;
     }
 
-    public void setPolicyRuleName(final String policyRuleName) {
-        this.policyRuleName = policyRuleName;
-    }
-
-    public String getPolicyRuleDescription() {
-        return policyRuleDescription;
-    }
-
-    public void setPolicyRuleDescription(final String policyRuleDescription) {
-        this.policyRuleDescription = policyRuleDescription;
+    public void setPolicyRulesViolated(final List<PolicyRule> policyRulesViolated) {
+        this.policyRulesViolated = policyRulesViolated;
     }
 
     public String getComponentName() {
