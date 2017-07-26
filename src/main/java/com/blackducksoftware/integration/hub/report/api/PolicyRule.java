@@ -13,7 +13,6 @@ package com.blackducksoftware.integration.hub.report.api;
 
 public class PolicyRule {
     private String name;
-
     private String description;
 
     public String getName() {
