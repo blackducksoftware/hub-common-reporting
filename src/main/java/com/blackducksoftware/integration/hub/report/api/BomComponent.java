@@ -26,6 +26,10 @@ package com.blackducksoftware.integration.hub.report.api;
 public class BomComponent {
     private String policyStatus;
 
+    private String policyRuleName;
+
+    private String policyRuleDescription;
+
     private String componentName;
 
     private String componentURL;
@@ -60,6 +64,22 @@ public class BomComponent {
 
     public void setPolicyStatus(final String policyStatus) {
         this.policyStatus = policyStatus;
+    }
+
+    public String getPolicyRuleName() {
+        return policyRuleName;
+    }
+
+    public void setPolicyRuleName(final String policyRuleName) {
+        this.policyRuleName = policyRuleName;
+    }
+
+    public String getPolicyRuleDescription() {
+        return policyRuleDescription;
+    }
+
+    public void setPolicyRuleDescription(final String policyRuleDescription) {
+        this.policyRuleDescription = policyRuleDescription;
     }
 
     public String getComponentName() {
