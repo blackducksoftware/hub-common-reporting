@@ -15,7 +15,10 @@ import java.awt.Color;
 
 public class CellStyle {
     Color backgroundColor = Color.WHITE;
-    Align contentAlignment;
-    Padding padding;
+    Align contentAlignment = Align.LEFT_CENTER;
+    Padding padding = new Padding(0);
+
+    int width;
+    int height;
 
 }

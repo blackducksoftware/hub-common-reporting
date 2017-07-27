@@ -13,10 +13,10 @@ package com.blackducksoftware.integration.hub.report.pdf.model;
 
 public class Padding {
 
-    int leftPadding = 0;
-    int rightPadding = 0;
-    int topPadding = 0;
-    int bottomPadding = 0;
+    final int leftPadding;
+    final int rightPadding;
+    final int topPadding;
+    final int bottomPadding;
 
     public Padding(final int padding) {
         this.leftPadding = padding;

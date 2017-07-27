@@ -17,9 +17,4 @@ public class Cell {
     FontStyle fontStyle;
     String imageResourcePath;
     String text;
-
-    int xCoord;
-    int yCoord;
-    int width;
-    int height;
 }
