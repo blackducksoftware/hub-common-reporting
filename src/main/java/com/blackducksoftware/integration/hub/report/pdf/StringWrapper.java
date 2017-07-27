@@ -36,9 +36,10 @@ public class StringWrapper {
 	public static String wrap(String str, int charLimit) {
 		ArrayList<String> subWords = new ArrayList<String>(Arrays.asList(str.split(" ")));		
 		for (int i = 0; i < subWords.size(); i++) {
+			String currentSubWord = subWords.get(i);
 			if (subWords.get(i).length() > charLimit) {
-				subWords.remove(subWords.get(i));
-				subWords.addAll(i, modifyWrapString(subWords.get(i), charLimit));
+				subWords.remove(currentSubWord);
+				subWords.addAll(i, modifyWrapString(currentSubWord, charLimit));
 			}
 		}
 		return String.join(" ", subWords);
