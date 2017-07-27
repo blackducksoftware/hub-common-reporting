@@ -65,5 +65,6 @@ public class RiskReportWriter {
             throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);
         }
     }
+    
 
 }
