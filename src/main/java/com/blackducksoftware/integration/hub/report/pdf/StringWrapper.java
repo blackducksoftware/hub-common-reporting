@@ -42,7 +42,7 @@ public class StringWrapper {
                 subWords.addAll(i, modifyWrapString(currentSubWord, charLimit));
             }
         }
-        return StringUtils.join(" ", subWords);
+        return StringUtils.joinWith(" ", subWords);
     }
 
     public static String wrap(final String str) {
@@ -54,7 +54,7 @@ public class StringWrapper {
                 subWords.addAll(i, modifyWrapString(currentWord, DEFAULT_CHAR_LENGTH));
             }
         }
-        return StringUtils.join(" ", subWords);
+        return StringUtils.joinWith(" ", subWords);
     }
 
     public static List<String> modifyWrapString(final String str, final int charLimit) {
