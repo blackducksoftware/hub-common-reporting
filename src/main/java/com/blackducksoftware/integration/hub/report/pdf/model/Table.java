@@ -13,8 +13,11 @@ package com.blackducksoftware.integration.hub.report.pdf.model;
 
 import java.util.List;
 
+import com.blackducksoftware.integration.hub.report.pdf.style.TableStyle;
+
 public class Table {
 
     List<Row> rows;
+    TableStyle tableStyle;
 
 }

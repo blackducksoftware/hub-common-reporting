@@ -9,16 +9,21 @@
  * accordance with the terms of the license agreement you entered into
  * with Black Duck Software.
  */
-package com.blackducksoftware.integration.hub.report.pdf.model;
+package com.blackducksoftware.integration.hub.report.pdf.style;
 
 import java.awt.Color;
+
+import com.blackducksoftware.integration.hub.report.pdf.model.Align;
 
 public class CellStyle {
     Color backgroundColor = Color.WHITE;
     Align contentAlignment = Align.LEFT_CENTER;
     Padding padding = new Padding(0);
+    Border border;
 
     int width;
     int height;
+    
+    
 
 }

@@ -84,7 +84,7 @@ public class RiskReportPDFWriter {
 
 	public File createPDFReportFile(final File outputDirectory, final ReportData report) throws RiskReportException {
 		try {
-			String fileName = report.getProjectName() + "_BlackDuck_RiskReport.pdf";
+			String fileName = "BlackDuck_RiskReport_" + report.getProjectName() + ".pdf";
 			PdfLayoutMgr pageMgr = PdfLayoutMgr.newRgbPageMgr();
 			LogicalPage lp = pageMgr.logicalPageStart(LogicalPage.Orientation.PORTRAIT);
 

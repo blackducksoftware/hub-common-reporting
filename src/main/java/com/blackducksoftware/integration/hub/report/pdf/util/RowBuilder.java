@@ -11,6 +11,23 @@
  */
 package com.blackducksoftware.integration.hub.report.pdf.util;
 
+import java.util.Arrays;
+
+import com.blackducksoftware.integration.hub.report.pdf.model.Cell;
+import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
+import com.blackducksoftware.integration.hub.report.pdf.style.RowStyle;
+
 public class RowBuilder {
+	
+	RowStyle rowStyle;
+    Padding rowPadding;
+    
+    int maxWidth;
+    int maxHeight;
+    
+    
+	
+	
+	
 
 }

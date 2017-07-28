@@ -9,17 +9,18 @@
  * accordance with the terms of the license agreement you entered into
  * with Black Duck Software.
  */
-package com.blackducksoftware.integration.hub.report.pdf.model;
+package com.blackducksoftware.integration.hub.report.pdf.style;
 
 import java.awt.Color;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-public class FontStyle {
+public class TextStyle {
 
     PDFont font = PDType1Font.HELVETICA;
     float fontSize = 12f;
     Color textColor = Color.BLACK;
+    Color highlightColor;
 
 }

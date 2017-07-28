@@ -12,5 +12,7 @@
 package com.blackducksoftware.integration.hub.report.pdf.util;
 
 public class TableBuilder {
+	
+	
 
 }
