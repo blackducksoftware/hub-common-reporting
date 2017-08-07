@@ -14,32 +14,38 @@ package com.blackducksoftware.integration.hub.report.pdf.model;
 import java.util.Arrays;
 import java.util.List;
 
+import com.blackducksoftware.integration.hub.report.pdf.style.Border;
 import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
-import com.blackducksoftware.integration.hub.report.pdf.style.RowStyle;
 
 public class Row {
-	
-    List<Cell> cells;
-    RowStyle rowStyle;
-    Padding rowPadding;
-    
-    int maxWidth;
-    int maxHeight;
-    
-    public Row () {
-    	
-    }
-    
-    public void addCells(Cell...cellsToAdd) {
-		cells.addAll(Arrays.asList(cellsToAdd));
-	}
 
-	public void removeCells(Cell...cellsToRemove) {
-		cells.removeAll(Arrays.asList(cellsToRemove));
-	}
-    
-    public Cell mergeCells (Cell...cells){
-    	return null;
+    Border border;
+    Padding padding;
+
+    List<Cell> cells;
+
+    public Row() {
+
     }
-    
+
+    public void addCells(final Cell... cellsToAdd) {
+        cells.addAll(Arrays.asList(cellsToAdd));
+    }
+
+    public void addCell(final int index, final Cell cell) {
+        cells.add(index, cell);
+    }
+
+    public void removeCells(final Cell... cellsToRemove) {
+        cells.removeAll(Arrays.asList(cellsToRemove));
+    }
+
+    public void removeCell(final int index) {
+        cells.remove(index);
+    }
+
+    public Cell mergeCells(final Cell... cells) {
+        return null;
+    }
+
 }

@@ -13,21 +13,21 @@ package com.blackducksoftware.integration.hub.report.pdf.model;
 
 import java.util.List;
 
-import com.blackducksoftware.integration.hub.report.pdf.style.Border;
 import com.blackducksoftware.integration.hub.report.pdf.style.CellStyle;
 import com.blackducksoftware.integration.hub.report.pdf.style.TextStyle;
 
 public class Cell {
 
+    TextStyle textStyle;
+    CellStyle cellStyle;
     String imageResourcePath;
-    List<String> textSections; 
+    List<String> textSections;
     String annotation;
     String hyperlink;
-    String hyperlinkKey; 
-    
+    String hyperlinkKey;
+
     public Cell() {
-    	
+
     }
-    
-    
+
 }
