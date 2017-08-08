@@ -9,7 +9,7 @@
  * accordance with the terms of the license agreement you entered into
  * with Black Duck Software.
  */
-package com.blackducksoftware.integration.hub.report.pdf.model;
+package com.blackducksoftware.integration.hub.report.pdf.style;
 
 public enum Align {
     LEFT_TOP,

@@ -11,8 +11,6 @@
  */
 package com.blackducksoftware.integration.hub.report.pdf.util;
 
-import java.util.List;
-
 import com.blackducksoftware.integration.hub.report.pdf.model.Cell;
 import com.blackducksoftware.integration.hub.report.pdf.style.Border;
 import com.blackducksoftware.integration.hub.report.pdf.style.CellStyle;
@@ -21,30 +19,30 @@ import com.blackducksoftware.integration.hub.report.pdf.style.TextStyle;
 
 public class CellBuilder {
 
-    Padding cellPadding;
-    Border cellBorder;
-    CellStyle cellStyle;
-    TextStyle textStyle;
+    public Padding cellPadding;
+    public Border cellBorder;
+    public CellStyle cellStyle;
+    public TextStyle textStyle;
 
-    int width;
-    int height;
+    public int width = 10;
+    public int height = 10;
 
-    int colSpan;
+    public int colSpan = 1;
 
-    String imageResourcePath;
-    List<String> textSections;
-    String annotation;
-    String hyperlink;
-    String hyperlinkKey;
+    public String imageResourcePath;
+    public String text;
+    public String annotation;
+    public String hyperlink;
+    public String hyperlinkKey;
 
-    public Cell buildCell(final int xCoord, final int yCoord, final int maxWidth, final int maxHeight) {
+    public Cell buildCell(final int maxWidth, final int maxHeight) {
         if (width > maxWidth) {
             width = maxWidth;
         }
         if (height > maxHeight) {
             height = maxHeight;
         }
-        return new Cell(cellPadding, cellBorder, textStyle, cellStyle, imageResourcePath, textSections, annotation, hyperlink, hyperlinkKey, width, height, colSpan, xCoord, yCoord);
+        return new Cell(cellPadding, cellBorder, textStyle, cellStyle, imageResourcePath, text, annotation, hyperlink, hyperlinkKey, width, height, colSpan);
     }
 
 }

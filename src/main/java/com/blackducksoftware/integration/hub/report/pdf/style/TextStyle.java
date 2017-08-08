@@ -18,10 +18,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class TextStyle {
 
-    PDFont font = PDType1Font.HELVETICA;
-    float fontSize = 12f;
-    Color textColor = Color.BLACK;
-    Color highlightColor;
+    private PDFont font = PDType1Font.HELVETICA;
+    private float fontSize = 12f;
+    private Color textColor = Color.BLACK;
+    private Color highlightColor;
 
     public TextStyle setFont(final PDFont font) {
         this.font = font;
@@ -41,6 +41,22 @@ public class TextStyle {
     public TextStyle setHighlightColor(final Color highlightColor) {
         this.highlightColor = highlightColor;
         return this;
+    }
+
+    public PDFont getFont() {
+        return font;
+    }
+
+    public float getFontSize() {
+        return fontSize;
+    }
+
+    public Color getTextColor() {
+        return textColor;
+    }
+
+    public Color getHighlightColor() {
+        return highlightColor;
     }
 
 }

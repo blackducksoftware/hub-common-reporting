@@ -13,16 +13,14 @@ package com.blackducksoftware.integration.hub.report.pdf.style;
 
 import java.awt.Color;
 
-import com.blackducksoftware.integration.hub.report.pdf.model.Align;
-
 public class CellStyle {
-    Color backgroundColor = Color.WHITE;
-    Align contentAlignment = Align.LEFT_CENTER;
-    Padding padding = new Padding(0);
-    Border border;
+    private Color backgroundColor = Color.WHITE;
+    private Align contentAlignment = Align.LEFT_CENTER;
+    private Padding padding = new Padding(0);
+    private Border border;
 
-    int width;
-    int height;
+    private int width;
+    private int height;
 
     public CellStyle setBackgroundColor(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -52,6 +50,30 @@ public class CellStyle {
     public CellStyle setHeight(final int height) {
         this.height = height;
         return this;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public Align getContentAlignment() {
+        return contentAlignment;
+    }
+
+    public Padding getPadding() {
+        return padding;
+    }
+
+    public Border getBorder() {
+        return border;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
 }

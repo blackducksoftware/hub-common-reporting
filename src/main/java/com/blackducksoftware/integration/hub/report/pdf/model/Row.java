@@ -16,35 +16,19 @@ import java.util.List;
 import com.blackducksoftware.integration.hub.report.pdf.style.Border;
 import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
 
-public class Row {
+public class Row extends Rectangle {
 
     private final Border border;
     private final Padding padding;
 
     private final List<Cell> cells;
 
-    private final int width;
-    private final int height;
-
-    private final int xCoord;
-    private final int yCoord;
-
-    public Row(final Border border, final Padding padding, final List<Cell> cells, final int width, final int height, final int xCoord, final int yCoord) {
+    public Row(final Border border, final Padding padding, final List<Cell> cells, final int width, final int height) {
         this.border = border;
         this.padding = padding;
         this.cells = cells;
         this.width = width;
         this.height = height;
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
-    }
-
-    public int getxCoord() {
-        return xCoord;
-    }
-
-    public int getyCoord() {
-        return yCoord;
     }
 
     public Border getBorder() {
@@ -57,14 +41,6 @@ public class Row {
 
     public List<Cell> getCells() {
         return cells;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
 }

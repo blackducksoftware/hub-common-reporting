@@ -16,12 +16,14 @@ import java.io.File;
 import org.junit.Test;
 
 import com.blackducksoftware.integration.hub.report.pdf.PDFBoxWriter;
+import com.blackducksoftware.integration.log.LogLevel;
+import com.blackducksoftware.integration.log.PrintStreamIntLogger;
 
 public class PDFBoxTest {
 
     @Test
     public void testCreatePDFReportFile() throws Exception {
-        final PDFBoxWriter writer = new PDFBoxWriter();
+        final PDFBoxWriter writer = new PDFBoxWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
         writer.createPDFReportFile(new File("."), null);
     }
 }

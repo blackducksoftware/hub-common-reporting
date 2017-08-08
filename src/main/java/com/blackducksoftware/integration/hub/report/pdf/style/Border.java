@@ -13,9 +13,9 @@ public class Border {
         RIGHT;
     }
 
-    public Set<BorderSide> sides = new HashSet<>();
-    public Color color = Color.BLACK;
-    public int width = 1;
+    private final Set<BorderSide> sides = new HashSet<>();
+    private Color color = Color.BLACK;
+    private int width = 1;
 
     public Border() {
     }
@@ -33,14 +33,31 @@ public class Border {
         this.width = width;
     }
 
-    public Border addSide(final BorderSide side) {
-        sides.add(side);
+    public Border addSide(final BorderSide... sides) {
+        for (final BorderSide side : sides) {
+            this.sides.add(side);
+        }
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "Border [color=" + color + ", width=" + width + "]";
+    public Set<BorderSide> getSides() {
+        return sides;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(final Color color) {
+        this.color = color;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(final int width) {
+        this.width = width;
     }
 
 }

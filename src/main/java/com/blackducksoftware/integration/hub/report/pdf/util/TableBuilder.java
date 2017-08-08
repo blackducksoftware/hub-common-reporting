@@ -23,22 +23,17 @@ import com.blackducksoftware.integration.hub.report.pdf.style.TextStyle;
 
 public class TableBuilder {
 
-    Padding tablePadding;
-    Border tableBorder;
-    CellStyle tableCellStyle;
-    TextStyle tableTextStyle;
+    public Padding tablePadding;
+    public Border tableBorder;
+    public CellStyle tableCellStyle;
+    public TextStyle tableTextStyle;
 
     private final int width;
     private final int height;
 
-    private final int xCoord;
-    private final int yCoord;
+    public List<RowBuilder> rowBuilders = new ArrayList<>();
 
-    List<RowBuilder> rowBuilders = new ArrayList<>();
-
-    public TableBuilder(final int xCoord, final int yCoord, final int width, final int height) {
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
+    public TableBuilder(final int width, final int height) {
         this.width = width;
         this.height = height;
     }
@@ -59,13 +54,11 @@ public class TableBuilder {
         if (numberOfRowBuilders > 0) {
             final int rowHeight = height / numberOfRowBuilders;
             final List<Row> rows = new ArrayList<>();
-            int rowYCoord = yCoord;
             for (final RowBuilder rowBuilder : rowBuilders) {
-                rows.add(rowBuilder.buildRow(xCoord, rowYCoord, width, rowHeight));
-                rowYCoord = rowYCoord + rowHeight;
+                rows.add(rowBuilder.buildRow(width, rowHeight));
             }
 
-            return new Table(tableBorder, tablePadding, rows, width, height, xCoord, yCoord);
+            return new Table(tableBorder, tablePadding, rows, width, height);
         }
         return null;
     }

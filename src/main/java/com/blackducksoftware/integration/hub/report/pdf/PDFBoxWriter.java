@@ -28,8 +28,15 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.blackducksoftware.integration.hub.report.api.ReportData;
 import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
+import com.blackducksoftware.integration.log.IntLogger;
 
 public class PDFBoxWriter {
+
+    IntLogger logger;
+
+    public PDFBoxWriter(final IntLogger logger) {
+        this.logger = logger;
+    }
 
     public File createPDFReportFile(final File outputDirectory, final ReportData report) throws RiskReportException {
         try (PDDocument document = new PDDocument()) {

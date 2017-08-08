@@ -23,14 +23,14 @@ import com.blackducksoftware.integration.hub.report.pdf.style.TextStyle;
 
 public class RowBuilder {
 
-    Padding rowPadding;
-    Border rowBorder;
-    CellStyle rowCellStyle;
-    TextStyle rowTextStyle;
+    public Padding rowPadding;
+    public Border rowBorder;
+    public CellStyle rowCellStyle;
+    public TextStyle rowTextStyle;
 
-    int height;
+    public int height;
 
-    List<CellBuilder> cellBuilders = new ArrayList<>();
+    public List<CellBuilder> cellBuilders = new ArrayList<>();
 
     public CellBuilder newCellBuilder() {
         final CellBuilder cellBuilder = new CellBuilder();
@@ -41,7 +41,7 @@ public class RowBuilder {
         return cellBuilder;
     }
 
-    public Row buildRow(final int xCoord, final int yCoord, final int maxWidth, final int maxHeight) {
+    public Row buildRow(final int maxWidth, final int maxHeight) {
         if (height > maxHeight) {
             height = maxHeight;
         }
@@ -49,13 +49,11 @@ public class RowBuilder {
         if (numberOfCellBuilders > 0) {
             final int width = maxWidth / numberOfCellBuilders;
             final List<Cell> cells = new ArrayList<>();
-            int cellXCoord = xCoord;
             for (final CellBuilder cellBuilder : cellBuilders) {
-                cells.add(cellBuilder.buildCell(cellXCoord, yCoord, width, height));
-                cellXCoord = cellXCoord + width;
+                cells.add(cellBuilder.buildCell(width, height));
             }
 
-            return new Row(rowBorder, rowPadding, cells, maxWidth, height, xCoord, yCoord);
+            return new Row(rowBorder, rowPadding, cells, maxWidth, height);
         }
         return null;
     }

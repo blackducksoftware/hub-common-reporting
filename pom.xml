@@ -21,6 +21,11 @@
   </scm>
 
   <dependencies>
+  	<dependency>
+      <groupId>com.blackducksoftware.integration</groupId>
+      <artifactId>integration-common</artifactId>
+      <version>6.0.2</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
