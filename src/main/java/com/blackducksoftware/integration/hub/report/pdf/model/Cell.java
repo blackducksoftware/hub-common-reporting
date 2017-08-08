@@ -31,7 +31,7 @@ public class Cell extends Rectangle {
     private final int colSpan;
 
     public Cell(final Padding padding, final Border border, final TextStyle textStyle, final CellStyle cellStyle, final String imageResourcePath, final String text, final String annotation, final String hyperlink, final String hyperlinkKey,
-            final int width, final int height, final int colSpan) {
+            final int colSpan) {
         this.padding = padding;
         this.border = border;
         this.textStyle = textStyle;
@@ -41,8 +41,6 @@ public class Cell extends Rectangle {
         this.annotation = annotation;
         this.hyperlink = hyperlink;
         this.hyperlinkKey = hyperlinkKey;
-        this.width = width;
-        this.height = height;
         this.colSpan = colSpan;
     }
 

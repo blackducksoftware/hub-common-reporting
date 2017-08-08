@@ -28,6 +28,10 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.blackducksoftware.integration.hub.report.api.ReportData;
 import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
+import com.blackducksoftware.integration.hub.report.pdf.style.CellStyle;
+import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
+import com.blackducksoftware.integration.hub.report.pdf.util.CellBuilder;
+import com.blackducksoftware.integration.hub.report.pdf.util.DocumentManager;
 import com.blackducksoftware.integration.log.IntLogger;
 
 public class PDFBoxWriter {
@@ -39,6 +43,7 @@ public class PDFBoxWriter {
     }
 
     public File createPDFReportFile(final File outputDirectory, final ReportData report) throws RiskReportException {
+        File pdfFile = null;
         try (PDDocument document = new PDDocument()) {
             final PDPage page = new PDPage();
             document.addPage(page);
@@ -70,12 +75,25 @@ public class PDFBoxWriter {
             contents.endText();
             contents.close();
 
-            final File pdfFile = new File(outputDirectory, "testRiskReport.pdf");
+            pdfFile = new File(outputDirectory, "testRiskReport.pdf");
             document.save(pdfFile);
 
-            return pdfFile;
         } catch (final IOException | URISyntaxException e) {
             throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);
         }
+
+        final File newPdfFile = new File(outputDirectory, "testRiskReport2.pdf");
+        try (DocumentManager docManager = new DocumentManager(newPdfFile)) {
+            final int width = (int) docManager.getPageContentBox().getWidth();
+            final float height = docManager.getPageContentBox().getHeight();
+            final Padding padding = new Padding(10);
+            final CellStyle cellStyle = new CellStyle();
+            cellStyle.setBackgroundColor(Color.ORANGE).setHeight(100).setWidth(width);
+            final CellBuilder cellBuilder = new CellBuilder();
+
+        } catch (final IOException e) {
+            throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);
+        }
+        return pdfFile;
     }
 }

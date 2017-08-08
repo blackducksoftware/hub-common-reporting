@@ -24,9 +24,6 @@ public class CellBuilder {
     public CellStyle cellStyle;
     public TextStyle textStyle;
 
-    public int width = 10;
-    public int height = 10;
-
     public int colSpan = 1;
 
     public String imageResourcePath;
@@ -36,13 +33,13 @@ public class CellBuilder {
     public String hyperlinkKey;
 
     public Cell buildCell(final int maxWidth, final int maxHeight) {
-        if (width > maxWidth) {
-            width = maxWidth;
+        if (cellStyle.getWidth() > maxWidth) {
+            cellStyle.setWidth(maxWidth);
         }
-        if (height > maxHeight) {
-            height = maxHeight;
+        if (cellStyle.getHeight() > maxHeight) {
+            cellStyle.setHeight(maxHeight);
         }
-        return new Cell(cellPadding, cellBorder, textStyle, cellStyle, imageResourcePath, text, annotation, hyperlink, hyperlinkKey, width, height, colSpan);
+        return new Cell(cellPadding, cellBorder, textStyle, cellStyle, imageResourcePath, text, annotation, hyperlink, hyperlinkKey, colSpan);
     }
 
 }

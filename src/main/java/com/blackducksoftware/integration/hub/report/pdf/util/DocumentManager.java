@@ -12,6 +12,7 @@
 package com.blackducksoftware.integration.hub.report.pdf.util;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -42,7 +43,10 @@ public class DocumentManager implements Closeable {
 
     PDPage currentPage;
 
-    public DocumentManager() {
+    File outputFile;
+
+    public DocumentManager(final File outputFile) {
+        this.outputFile = outputFile;
         this.document = new PDDocument();
         pages = new HashMap<>();
         currentPage = new PDPage();
@@ -77,6 +81,8 @@ public class DocumentManager implements Closeable {
             cell.yCoord = yCoord;
             final PDPageContentStream contentStream = new PDPageContentStream(document, currentPage, AppendMode.APPEND, false, false);
             final CellStyle cellStyle = cell.getCellStyle();
+            cell.width = cellStyle.getWidth();
+            cell.height = cellStyle.getHeight();
             if (cellStyle.getBackgroundColor() != null) {
                 contentStream.setNonStrokingColor(cell.getCellStyle().getBackgroundColor());
                 contentStream.addRect(xCoord, yCoord, cell.width, cell.height);
@@ -87,8 +93,13 @@ public class DocumentManager implements Closeable {
                 contentStream.drawImage(pdImage, xCoord, yCoord, 240, 60);
             }
             final TextStyle textStyle = cell.getTextStyle();
-            if (cellStyle.getBackgroundColor() != null) {
-
+            if (cell.getText() != null) {
+                contentStream.setFont(textStyle.getFont(), textStyle.getFontSize());
+                contentStream.setNonStrokingColor(textStyle.getTextColor());
+                // TODO padding
+                contentStream.newLineAtOffset(cell.xCoord, cell.yCoord);
+                contentStream.showText("Black Duck Risk Report");
+                contentStream.endText();
             }
 
             contentStream.close();
@@ -126,6 +137,7 @@ public class DocumentManager implements Closeable {
     @Override
     public void close() throws IOException {
         document.close();
+        document.save(outputFile);
     }
 
 }
