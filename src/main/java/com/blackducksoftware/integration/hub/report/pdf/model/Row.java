@@ -11,7 +11,6 @@
  */
 package com.blackducksoftware.integration.hub.report.pdf.model;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.blackducksoftware.integration.hub.report.pdf.style.Border;
@@ -19,33 +18,53 @@ import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
 
 public class Row {
 
-    Border border;
-    Padding padding;
+    private final Border border;
+    private final Padding padding;
 
-    List<Cell> cells;
+    private final List<Cell> cells;
 
-    public Row() {
+    private final int width;
+    private final int height;
 
+    private final int xCoord;
+    private final int yCoord;
+
+    public Row(final Border border, final Padding padding, final List<Cell> cells, final int width, final int height, final int xCoord, final int yCoord) {
+        this.border = border;
+        this.padding = padding;
+        this.cells = cells;
+        this.width = width;
+        this.height = height;
+        this.xCoord = xCoord;
+        this.yCoord = yCoord;
     }
 
-    public void addCells(final Cell... cellsToAdd) {
-        cells.addAll(Arrays.asList(cellsToAdd));
+    public int getxCoord() {
+        return xCoord;
     }
 
-    public void addCell(final int index, final Cell cell) {
-        cells.add(index, cell);
+    public int getyCoord() {
+        return yCoord;
     }
 
-    public void removeCells(final Cell... cellsToRemove) {
-        cells.removeAll(Arrays.asList(cellsToRemove));
+    public Border getBorder() {
+        return border;
     }
 
-    public void removeCell(final int index) {
-        cells.remove(index);
+    public Padding getPadding() {
+        return padding;
     }
 
-    public Cell mergeCells(final Cell... cells) {
-        return null;
+    public List<Cell> getCells() {
+        return cells;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
 }

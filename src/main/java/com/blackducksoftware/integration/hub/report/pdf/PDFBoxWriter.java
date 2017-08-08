@@ -65,6 +65,7 @@ public class PDFBoxWriter {
 
             final File pdfFile = new File(outputDirectory, "testRiskReport.pdf");
             document.save(pdfFile);
+
             return pdfFile;
         } catch (final IOException | URISyntaxException e) {
             throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);

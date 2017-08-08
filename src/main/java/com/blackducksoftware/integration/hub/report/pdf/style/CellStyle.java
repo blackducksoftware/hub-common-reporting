@@ -23,7 +23,35 @@ public class CellStyle {
 
     int width;
     int height;
-    
-    
+
+    public CellStyle setBackgroundColor(final Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+    public CellStyle setContentAlignment(final Align contentAlignment) {
+        this.contentAlignment = contentAlignment;
+        return this;
+    }
+
+    public CellStyle setPadding(final Padding padding) {
+        this.padding = padding;
+        return this;
+    }
+
+    public CellStyle setBorder(final Border border) {
+        this.border = border;
+        return this;
+    }
+
+    public CellStyle setWidth(final int width) {
+        this.width = width;
+        return this;
+    }
+
+    public CellStyle setHeight(final int height) {
+        this.height = height;
+        return this;
+    }
 
 }

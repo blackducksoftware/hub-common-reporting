@@ -23,4 +23,24 @@ public class TextStyle {
     Color textColor = Color.BLACK;
     Color highlightColor;
 
+    public TextStyle setFont(final PDFont font) {
+        this.font = font;
+        return this;
+    }
+
+    public TextStyle setFontSize(final float fontSize) {
+        this.fontSize = fontSize;
+        return this;
+    }
+
+    public TextStyle setTextColor(final Color textColor) {
+        this.textColor = textColor;
+        return this;
+    }
+
+    public TextStyle setHighlightColor(final Color highlightColor) {
+        this.highlightColor = highlightColor;
+        return this;
+    }
+
 }
