@@ -23,6 +23,8 @@ public class Cell extends Rectangle {
     private final TextStyle textStyle;
     private final CellStyle cellStyle;
     private final String imageResourcePath;
+    private final int imageWidth;
+    private final int imageHeight;
     private final String text;
     private final String annotation;
     private final String hyperlink;
@@ -30,18 +32,28 @@ public class Cell extends Rectangle {
 
     private final int colSpan;
 
-    public Cell(final Padding padding, final Border border, final TextStyle textStyle, final CellStyle cellStyle, final String imageResourcePath, final String text, final String annotation, final String hyperlink, final String hyperlinkKey,
-            final int colSpan) {
+    public Cell(final Padding padding, final Border border, final TextStyle textStyle, final CellStyle cellStyle, final String imageResourcePath, final int imageWidth, final int imageHeight, final String text, final String annotation,
+            final String hyperlink, final String hyperlinkKey, final int colSpan) {
         this.padding = padding;
         this.border = border;
         this.textStyle = textStyle;
         this.cellStyle = cellStyle;
         this.imageResourcePath = imageResourcePath;
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
         this.text = text;
         this.annotation = annotation;
         this.hyperlink = hyperlink;
         this.hyperlinkKey = hyperlinkKey;
         this.colSpan = colSpan;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
     }
 
     public Padding getPadding() {

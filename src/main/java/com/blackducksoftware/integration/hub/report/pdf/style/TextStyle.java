@@ -16,12 +16,23 @@ import java.awt.Color;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-public class TextStyle {
+public class TextStyle extends Style {
 
     private PDFont font = PDType1Font.HELVETICA;
     private float fontSize = 12f;
     private Color textColor = Color.BLACK;
     private Color highlightColor;
+
+    public TextStyle(final TextStyle styleToCopy) {
+        font = styleToCopy.getFont();
+        fontSize = styleToCopy.getFontSize();
+        textColor = styleToCopy.getTextColor();
+        highlightColor = styleToCopy.getHighlightColor();
+    }
+
+    public TextStyle() {
+
+    }
 
     public TextStyle setFont(final PDFont font) {
         this.font = font;

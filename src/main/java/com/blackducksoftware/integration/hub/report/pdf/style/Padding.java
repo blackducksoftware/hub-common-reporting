@@ -11,12 +11,19 @@
  */
 package com.blackducksoftware.integration.hub.report.pdf.style;
 
-public class Padding {
+public class Padding extends Style {
 
     private final int leftPadding;
     private final int rightPadding;
     private final int topPadding;
     private final int bottomPadding;
+
+    public Padding(final Padding paddingToCopy) {
+        leftPadding = paddingToCopy.getLeftPadding();
+        rightPadding = paddingToCopy.getRightPadding();
+        topPadding = paddingToCopy.getTopPadding();
+        bottomPadding = paddingToCopy.getBottomPadding();
+    }
 
     public Padding(final int padding) {
         this.leftPadding = padding;

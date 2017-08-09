@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Border {
+public class Border extends Style {
 
     public enum BorderSide {
         TOP,
@@ -13,22 +13,30 @@ public class Border {
         RIGHT;
     }
 
-    private final Set<BorderSide> sides = new HashSet<>();
-    private Color color = Color.BLACK;
-    private int width = 1;
+    private final Set<BorderSide> sides;
+    private Color color;
+    private int width = 0;
+
+    public Border(final Border borderToCopy) {
+        sides = borderToCopy.getSides();
+        color = borderToCopy.getColor();
+        width = borderToCopy.getWidth();
+    }
 
     public Border() {
+        this(Color.BLACK, 0);
     }
 
     public Border(final Color color) {
-        this.color = color;
+        this(color, 0);
     }
 
     public Border(final int width) {
-        this.width = width;
+        this(Color.BLACK, width);
     }
 
     public Border(final Color color, final int width) {
+        sides = new HashSet<>();
         this.color = color;
         this.width = width;
     }

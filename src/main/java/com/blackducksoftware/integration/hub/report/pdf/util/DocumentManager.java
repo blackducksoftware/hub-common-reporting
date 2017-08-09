@@ -88,56 +88,63 @@ public class DocumentManager implements Closeable {
                 contentStream.addRect(xCoord, yCoord, cell.width, cell.height);
                 contentStream.fill();
             }
+
             if (cell.getImageResourcePath() != null) {
                 final PDImageXObject pdImage = PDImageXObject.createFromFile(getClass().getResource(cell.getImageResourcePath()).toURI().getPath(), document);
-                contentStream.drawImage(pdImage, xCoord, yCoord, 240, 60);
+                contentStream.drawImage(pdImage, xCoord + cellStyle.getPadding().getLeftPadding(), yCoord + cellStyle.getPadding().getBottomPadding(), cell.getImageWidth(), cell.getImageHeight());
             }
             final TextStyle textStyle = cell.getTextStyle();
             if (cell.getText() != null) {
                 contentStream.setFont(textStyle.getFont(), textStyle.getFontSize());
                 contentStream.setNonStrokingColor(textStyle.getTextColor());
                 // TODO padding
+                contentStream.beginText();
                 contentStream.newLineAtOffset(cell.xCoord, cell.yCoord);
                 contentStream.showText("Black Duck Risk Report");
                 contentStream.endText();
             }
 
             contentStream.close();
-
+            pages.get(currentPage).add(cell);
         } catch (final IOException | URISyntaxException e) {
             throw new RiskReportException("Issue writing this Cell : " + e.getMessage(), e);
         }
         // TODO
     }
 
-    public void writeNextCellInRow(final Cell previousCell, final Cell cell) throws RiskReportException {
-        writeCell(previousCell.xCoord + previousCell.width, previousCell.yCoord, cell);
+    public void writeNextCellInRow(final Cell previousCell, final Cell cell, final int rowXCoord, final int rowYCoord) throws RiskReportException {
+        if (previousCell == null) {
+            writeCell(rowXCoord, rowYCoord, cell);
+        } else {
+            writeCell(previousCell.xCoord + previousCell.width, previousCell.yCoord, cell);
+        }
     }
 
     public void writeRow(final int xCoord, final int yCoord, final Row row) throws RiskReportException {
-        // try {
-        // // TODO
-        // } catch (final IOException | URISyntaxException e) {
-        // throw new RiskReportException("Issue writing this Row : " + e.getMessage(), e);
-        // }
+        // write the cells
+        Cell previousCell = null;
+        for (final Cell cell : row.getCells()) {
+            writeNextCellInRow(previousCell, cell, xCoord, yCoord);
+            previousCell = cell;
+        }
     }
 
-    public void writeNextRowInTable(final Row previousRow, final Row row) throws RiskReportException {
-        writeRow(previousRow.xCoord, previousRow.yCoord - previousRow.height, row);
+    public void writeNextRowInTable(final Row previousRow, final Row row, final int tableXCoord, final int tableYCoord) throws RiskReportException {
+        if (previousRow == null) {
+            writeRow(tableXCoord, tableYCoord, row);
+        } else {
+            writeRow(previousRow.xCoord, previousRow.yCoord - previousRow.height, row);
+        }
     }
 
     public void writeTable(final int xCoord, final int yCoord, final Table table) throws RiskReportException {
-        // try {
         // // TODO
-        // } catch (final IOException | URISyntaxException e) {
-        // throw new RiskReportException("Issue writing this Table : " + e.getMessage(), e);
-        // }
     }
 
     @Override
     public void close() throws IOException {
-        document.close();
         document.save(outputFile);
+        document.close();
     }
 
 }

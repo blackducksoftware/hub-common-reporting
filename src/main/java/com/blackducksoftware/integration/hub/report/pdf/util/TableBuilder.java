@@ -21,46 +21,56 @@ import com.blackducksoftware.integration.hub.report.pdf.style.CellStyle;
 import com.blackducksoftware.integration.hub.report.pdf.style.Padding;
 import com.blackducksoftware.integration.hub.report.pdf.style.TextStyle;
 
-public class TableBuilder {
+public class TableBuilder extends Builder {
 
-    public Padding tablePadding;
-    public Border tableBorder;
-    public CellStyle tableCellStyle;
-    public TextStyle tableTextStyle;
-
-    private final int width;
-    private final int height;
+    public Padding tablePadding = new Padding(0);
+    public Border tableBorder = new Border();
+    public CellStyle tableCellStyle = new CellStyle();
+    public TextStyle tableTextStyle = new TextStyle();
 
     public List<RowBuilder> rowBuilders = new ArrayList<>();
 
-    public TableBuilder(final int width, final int height) {
-        this.width = width;
-        this.height = height;
-    }
-
     public RowBuilder newRowBuilder() {
         final RowBuilder rowBuilder = new RowBuilder();
-        rowBuilder.rowPadding = tablePadding;
-        rowBuilder.rowBorder = tableBorder;
-        rowBuilder.rowCellStyle = tableCellStyle;
-        rowBuilder.rowTextStyle = tableTextStyle;
+        rowBuilder.rowPadding = new Padding(tablePadding);
+        rowBuilder.rowBorder = new Border(tableBorder);
+        rowBuilder.rowCellStyle = new CellStyle(tableCellStyle);
+        rowBuilder.rowTextStyle = new TextStyle(tableTextStyle);
+        rowBuilders.add(rowBuilder);
         return rowBuilder;
     }
 
-    public Table buildTable() {
+    public Table buildTable(final int width, final int maxRowHeight) {
         // FIXME handle paging
 
         final int numberOfRowBuilders = rowBuilders.size();
         if (numberOfRowBuilders > 0) {
-            final int rowHeight = height / numberOfRowBuilders;
             final List<Row> rows = new ArrayList<>();
+            int height = 0;
             for (final RowBuilder rowBuilder : rowBuilders) {
-                rows.add(rowBuilder.buildRow(width, rowHeight));
+                final Row row = rowBuilder.buildRow(width, maxRowHeight);
+                height += row.height;
+                rows.add(row);
             }
-
             return new Table(tableBorder, tablePadding, rows, width, height);
         }
         return null;
+    }
+
+    public Padding getTablePadding() {
+        return tablePadding;
+    }
+
+    public Border getTableBorder() {
+        return tableBorder;
+    }
+
+    public CellStyle getTableCellStyle() {
+        return tableCellStyle;
+    }
+
+    public TextStyle getTableTextStyle() {
+        return tableTextStyle;
     }
 
 }

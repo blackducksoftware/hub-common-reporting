@@ -13,7 +13,7 @@ package com.blackducksoftware.integration.hub.report.pdf.style;
 
 import java.awt.Color;
 
-public class CellStyle {
+public class CellStyle extends Style {
     private Color backgroundColor = Color.WHITE;
     private Align contentAlignment = Align.LEFT_CENTER;
     private Padding padding = new Padding(0);
@@ -21,6 +21,19 @@ public class CellStyle {
 
     private int width;
     private int height;
+
+    public CellStyle(final CellStyle styleToCopy) {
+        backgroundColor = styleToCopy.getBackgroundColor();
+        contentAlignment = styleToCopy.getContentAlignment();
+        padding = styleToCopy.getPadding();
+        border = styleToCopy.getBorder();
+        width = styleToCopy.getWidth();
+        height = styleToCopy.getHeight();
+    }
+
+    public CellStyle() {
+
+    }
 
     public CellStyle setBackgroundColor(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
