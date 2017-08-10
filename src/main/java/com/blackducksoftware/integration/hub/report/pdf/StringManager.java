@@ -31,6 +31,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
+import com.blackducksoftware.integration.hub.report.pdf.util.PDFBoxManager;
+
 public class StringManager {
 
     public static final int DEFAULT_CHAR_LENGTH = 20;
@@ -127,6 +129,11 @@ public class StringManager {
         }
 
         return finalStrings;
+    }
+
+    public static float getStringWidth(final String text) throws IOException {
+        final float rawLength = PDFBoxManager.DEFAULT_FONT.getStringWidth(text);
+        return rawLength * (PDFBoxManager.DEFAULT_FONT_SIZE / 960f);
     }
 
     public static float getStringWidth(final PDFont font, final float fontSize, final String text) throws IOException {
