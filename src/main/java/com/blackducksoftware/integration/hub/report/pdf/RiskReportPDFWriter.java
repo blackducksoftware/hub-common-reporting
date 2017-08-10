@@ -162,7 +162,7 @@ public class RiskReportPDFWriter {
 				.textStyle(TextStyle.of(FONT_BODY, FONT_SIZE_CELL_BODY, CELL_COLOR_FONT_BODY))
 				.rowBuilder()
 				.cellBuilder().align(MIDDLE_LEFT).addStrs(riskType).buildCell()
-				.cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(count)).buildCell()
+				.cellBuilder().align(MIDDLE_CENTER).addStrs(StringManager.wrap(count)).buildCell()
 				.cellBuilder().align(MIDDLE_LEFT).add(riskColorCell).buildCell()
 				.buildRow()
 				.buildPart();
@@ -303,13 +303,13 @@ public class RiskReportPDFWriter {
 					.textStyle(TextStyle.of(FONT_BODY, FONT_SIZE_CELL_BODY, CELL_COLOR_FONT_BODY))
 					.rowBuilder()
 					.cellBuilder().align(MIDDLE_CENTER).add(r).buildCell()
-					.cellBuilder().align(MIDDLE_LEFT).addStrs(StringWrapper.wrap(b.getComponentName())).buildCell()
-					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(b.getComponentVersion())).buildCell()
+					.cellBuilder().align(MIDDLE_LEFT).addStrs(StringManager.wrap(b.getComponentName())).buildCell()
+					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringManager.wrap(b.getComponentVersion())).buildCell()
 					.cellBuilder().align(MIDDLE_CENTER).add(licRCell).buildCell()
-					.cellBuilder().align(MIDDLE_LEFT).addStrs(StringWrapper.wrap(b.getLicense())).buildCell()
-					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(h+"")).buildCell()
-					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(m+"")).buildCell()
-					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringWrapper.wrap(l+"")).buildCell()
+					.cellBuilder().align(MIDDLE_LEFT).addStrs(StringManager.wrap(b.getLicense())).buildCell()
+					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringManager.wrap(h+"")).buildCell()
+					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringManager.wrap(m+"")).buildCell()
+					.cellBuilder().align(MIDDLE_CENTER).addStrs(StringManager.wrap(l+"")).buildCell()
 					.cellBuilder().align(MIDDLE_CENTER).addStrs(optR).cellStyle(CellStyle.of(MIDDLE_CENTER, Padding.NO_PADDING, optRColor, BorderStyle.NO_BORDERS)).buildCell()
 					.buildRow()
 					.buildPart();
@@ -365,9 +365,9 @@ public class RiskReportPDFWriter {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < list.size(); i++) {
 			if (i == 0) {
-				sb.append(StringWrapper.wrap(list.get(i).getName(), charLimit));
+				sb.append(StringManager.wrap(list.get(i).getName(), charLimit));
 			} else {
-				sb.append(sep + " ").append(StringWrapper.wrap(list.get(i).getName(), charLimit));
+				sb.append(sep + " ").append(StringManager.wrap(list.get(i).getName(), charLimit));
 			}
 		}
 		return sb.toString();
