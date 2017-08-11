@@ -41,7 +41,7 @@ public class PDFBoxManager implements Closeable {
 
     public static final PDFont DEFAULT_FONT = PDType1Font.HELVETICA;
     public static final PDFont DEFAULT_FONT_BOLD = PDType1Font.HELVETICA_BOLD;
-    public static final float DEFAULT_FONT_SIZE = 12;
+    public static final float DEFAULT_FONT_SIZE = 10;
     public static final Color DEFAULT_COLOR = Color.BLACK;
 
     public PDFBoxManager(final File outputFile, final PDDocument document) throws IOException {
@@ -52,37 +52,39 @@ public class PDFBoxManager implements Closeable {
         contentStream = new PDPageContentStream(document, currentPage, AppendMode.APPEND, true, false);
     }
 
-    public void drawRectangle(final float x, final float y, final float width, final float height, final Color color) throws IOException {
+    public PDRectangle drawRectangle(final float x, final float y, final float width, final float height, final Color color) throws IOException {
         final float startingY = checkYAndSwitchPage(y, height);
         contentStream.setNonStrokingColor(color);
         contentStream.addRect(x, startingY, width, height);
         contentStream.fill();
+        return new PDRectangle(x, startingY, width, height);
     }
 
-    public void drawImage(final float x, final float y, final float width, final float height, final String resourceImageName) throws IOException, URISyntaxException {
+    public PDRectangle drawImage(final float x, final float y, final float width, final float height, final String resourceImageName) throws IOException, URISyntaxException {
         final float startingY = checkYAndSwitchPage(y, height);
         final URL imageURL = getClass().getResource(resourceImageName);
         final URI imageUri = imageURL.toURI();
         final File imageFile = new File(imageUri);
         final PDImageXObject pdImage = PDImageXObject.createFromFileByExtension(imageFile, document);
         contentStream.drawImage(pdImage, x, startingY, width, height);
+        return new PDRectangle(x, startingY, width, height);
     }
 
-    public void writeTextCentered(final float x, final float y, final String text, final PDFont font, final float fontSize, final Color textColor) throws IOException {
+    public PDRectangle writeTextCentered(final float x, final float y, final String text, final PDFont font, final float fontSize, final Color textColor) throws IOException {
         final float textLength = StringManager.getStringWidth(font, fontSize, text);
-        writeText(x - (textLength / 2), y, text, font, fontSize, textColor);
+        return writeText(x - (textLength / 2), y, text, font, fontSize, textColor);
     }
 
-    public void writeTextCentered(final float x, final float y, final String text) throws IOException {
+    public PDRectangle writeTextCentered(final float x, final float y, final String text) throws IOException {
         final float textLength = StringManager.getStringWidth(DEFAULT_FONT, DEFAULT_FONT_SIZE, text);
-        writeText(x - (textLength / 2), y, text, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
+        return writeText(x - (textLength / 2), y, text, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
     }
 
-    public void writeText(final float x, final float y, final String text) throws IOException {
-        writeText(x, y, text, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
+    public PDRectangle writeText(final float x, final float y, final String text) throws IOException {
+        return writeText(x, y, text, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
     }
 
-    public void writeText(final float x, final float y, final String text, final PDFont font, final float fontSize, final Color textColor) throws IOException {
+    public PDRectangle writeText(final float x, final float y, final String text, final PDFont font, final float fontSize, final Color textColor) throws IOException {
         final float startingY = checkYAndSwitchPage(y, fontSize);
         contentStream.beginText();
         contentStream.setFont(font, fontSize);
@@ -90,36 +92,99 @@ public class PDFBoxManager implements Closeable {
         contentStream.newLineAtOffset(x, startingY);
         contentStream.showText(text);
         contentStream.endText();
+        return new PDRectangle(x, startingY, StringManager.getStringWidth(font, fontSize, text), fontSize);
     }
 
-    public float writeWrappedText(final float x, final float y, final float width, final String text) throws IOException {
+    public PDRectangle writeWrappedText(final float x, final float y, final float width, final String text) throws IOException {
         return writeWrappedText(x, y, width, text, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
     }
 
-    public float writeWrappedText(final float x, final float y, final float width, final String text, final PDFont font, final float fontSize, final Color color) throws IOException {
-        float approximateHeight = fontSize / 4;
+    public PDRectangle writeWrappedCenteredText(final float x, final float y, final float width, final String text, final PDFont font, final float fontSize, final Color color) throws IOException {
         final List<String> textLines = StringManager.wrapToCombinedList(font, fontSize, text, Math.round(width));
+        return writeWrappedCenteredText(x, y, width, textLines, font, fontSize, color);
+    }
+
+    public PDRectangle writeWrappedCenteredText(final float x, final float y, final float width, final List<String> textLines, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final float startingY = checkYAndSwitchPage(y, fontSize);
         final int numOfLines = textLines.size();
-        approximateHeight += numOfLines * fontSize;
+        float actualWidth = width;
+        float approximateHeight = 0F;
         for (int i = 0; i < numOfLines; i++) {
-            writeText(x, y - (i * fontSize), textLines.get(i), font, fontSize, color);
+            final float textLength = StringManager.getStringWidth(DEFAULT_FONT, DEFAULT_FONT_SIZE, textLines.get(i));
+            final PDRectangle rectangle = writeText(x - (textLength / 2), startingY - (i * fontSize), textLines.get(i), font, fontSize, color);
+            if (numOfLines == 1) {
+                actualWidth = rectangle.getWidth();
+            }
+            approximateHeight += rectangle.getHeight();
         }
-        return approximateHeight;
+        return new PDRectangle(x, startingY, actualWidth, approximateHeight);
     }
 
-    public void writeLink(final float x, final float y, final String linkText, final String linkURL, final PDFont font, final float fontSize) throws IOException {
-        writeText(x, y, linkText, font, fontSize, Color.decode("#46759E"));
-        final float width = StringManager.getStringWidth(font, fontSize, linkText);
-        addAnnotationLinkRectangle(x, y, width, fontSize, linkURL);
+    public PDRectangle writeWrappedText(final float x, final float y, final float width, final String text, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final List<String> textLines = StringManager.wrapToCombinedList(font, fontSize, text, Math.round(width));
+        return writeWrappedText(x, y, width, textLines, font, fontSize, color);
     }
 
-    public float writeWrappedLink(final float x, final float y, final float width, final String linkText, final String linkURL, final PDFont font, final float fontSize) throws IOException {
-        final float height = writeWrappedText(x, y, width, linkText, font, fontSize, Color.decode("#46759E"));
-        addAnnotationLinkRectangle(x, y, width, height, linkURL);
-        return height;
+    public PDRectangle writeWrappedText(final float x, final float y, final float width, final List<String> textLines) throws IOException {
+        return writeWrappedText(x, y, width, textLines, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_COLOR);
     }
 
-    private void addAnnotationLinkRectangle(final float x, final float y, final float width, final float height, final String linkURL) throws IOException {
+    public PDRectangle writeWrappedText(final float x, final float y, final float width, final List<String> textLines, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final float startingY = checkYAndSwitchPage(y, fontSize);
+        final int numOfLines = textLines.size();
+        float actualWidth = width;
+        float approximateHeight = 0F;
+        for (int i = 0; i < numOfLines; i++) {
+            final PDRectangle rectangle = writeText(x, startingY - (i * fontSize), textLines.get(i), font, fontSize, color);
+            if (numOfLines == 1) {
+                actualWidth = rectangle.getWidth();
+            }
+            approximateHeight += rectangle.getHeight();
+        }
+        return new PDRectangle(x, startingY, actualWidth, approximateHeight);
+    }
+
+    public PDRectangle writeLink(final float x, final float y, final String linkText, final String linkURL, final PDFont font, final float fontSize) throws IOException {
+        final PDRectangle rectangle = writeText(x, y, linkText, font, fontSize, Color.decode("#46759E"));
+        addAnnotationLinkRectangle(rectangle.getLowerLeftX(), rectangle.getLowerLeftY(), rectangle.getWidth(), rectangle.getHeight(), linkURL);
+        return rectangle;
+    }
+
+    public PDRectangle writeWrappedLink(final float x, final float y, final float width, final String linkText, final String linkURL, final PDFont font, final float fontSize) throws IOException {
+        return writeWrappedLink(x, y, width, linkText, linkURL, font, fontSize, Color.decode("#46759E"));
+    }
+
+    public PDRectangle writeWrappedLink(final float x, final float y, final float width, final String linkText, final String linkURL, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final PDRectangle rectangle = writeWrappedText(x, y, width, linkText, font, fontSize, color);
+        addAnnotationLinkRectangle(rectangle.getLowerLeftX(), rectangle.getLowerLeftY(), rectangle.getWidth(), rectangle.getHeight(), linkURL);
+        return rectangle;
+    }
+
+    public PDRectangle writeWrappedLink(final float x, final float y, final float width, final List<String> linkTextLines, final String linkURL, final PDFont font, final float fontSize) throws IOException {
+        return writeWrappedLink(x, y, width, linkTextLines, linkURL, font, fontSize, Color.decode("#46759E"));
+    }
+
+    public PDRectangle writeWrappedCenteredLink(final float x, final float y, final float width, final List<String> linkTextLines, final String linkURL, final Color color) throws IOException {
+        return writeWrappedCenteredLink(x, y, width, linkTextLines, linkURL, DEFAULT_FONT, DEFAULT_FONT_SIZE, color);
+    }
+
+    public PDRectangle writeWrappedCenteredLink(final float x, final float y, final float width, final List<String> linkTextLines, final String linkURL, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final PDRectangle rectangle = writeWrappedCenteredText(x, y, width, linkTextLines, font, fontSize, color);
+        addAnnotationLinkRectangle(rectangle.getLowerLeftX(), rectangle.getLowerLeftY(), rectangle.getWidth(), rectangle.getHeight(), linkURL);
+        return rectangle;
+    }
+
+    public PDRectangle writeWrappedLink(final float x, final float y, final float width, final List<String> linkTextLines, final String linkURL, final Color color) throws IOException {
+        return writeWrappedLink(x, y, width, linkTextLines, linkURL, DEFAULT_FONT, DEFAULT_FONT_SIZE, color);
+    }
+
+    public PDRectangle writeWrappedLink(final float x, final float y, final float width, final List<String> linkTextLines, final String linkURL, final PDFont font, final float fontSize, final Color color) throws IOException {
+        final PDRectangle rectangle = writeWrappedText(x, y, width, linkTextLines, font, fontSize, color);
+        addAnnotationLinkRectangle(rectangle.getLowerLeftX(), rectangle.getLowerLeftY(), rectangle.getWidth(), rectangle.getHeight(), linkURL);
+        return rectangle;
+    }
+
+    private PDRectangle addAnnotationLinkRectangle(final float x, final float y, final float width, final float height, final String linkURL) throws IOException {
         final float startingY = checkYAndSwitchPage(y, height);
         final PDAnnotationLink txtLink = new PDAnnotationLink();
         final PDRectangle position = new PDRectangle();
@@ -134,6 +199,7 @@ public class PDFBoxManager implements Closeable {
         txtLink.setAction(action);
 
         currentPage.getAnnotations().add(txtLink);
+        return new PDRectangle(x, startingY, width, height);
     }
 
     private float checkYAndSwitchPage(final float y, final float height) throws IOException {
@@ -145,6 +211,10 @@ public class PDFBoxManager implements Closeable {
             return currentPage.getMediaBox().getHeight() - 20 - height;
         }
         return y;
+    }
+
+    public float getApproximateWrappedStringHeight(final int numberOfTextLines, final float fontSize) {
+        return numberOfTextLines * fontSize + fontSize;
     }
 
     @Override

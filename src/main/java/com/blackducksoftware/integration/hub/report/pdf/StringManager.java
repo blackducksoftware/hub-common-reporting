@@ -84,6 +84,10 @@ public class StringManager {
         return brokenUpStrings;
     }
 
+    public static List<String> wrapToCombinedList(final String str, final int charLimit) throws IOException {
+        return wrapToCombinedList(PDFBoxManager.DEFAULT_FONT, PDFBoxManager.DEFAULT_FONT_SIZE, str, charLimit);
+    }
+
     public static List<String> wrapToCombinedList(final PDFont font, final float fontSize, final String str, final int charLimit) throws IOException {
         final ArrayList<String> subWords = new ArrayList<>(Arrays.asList(str.split(" ")));
         String previousBrokenWord = "";
