@@ -109,15 +109,25 @@ public class PDFBoxManager implements Closeable {
         final int numOfLines = textLines.size();
         float actualWidth = width;
         float approximateHeight = 0F;
+        float leftMostX = x + width;
+        float lowestY = startingY;
         for (int i = 0; i < numOfLines; i++) {
             final float textLength = StringManager.getStringWidth(DEFAULT_FONT, DEFAULT_FONT_SIZE, textLines.get(i));
-            final PDRectangle rectangle = writeText(x - (textLength / 2), startingY - (i * fontSize), textLines.get(i), font, fontSize, color);
+            final float textX = x - (textLength / 2);
+            if (textX < leftMostX) {
+                leftMostX = textX;
+            }
+            final float textY = startingY - (i * fontSize);
+            if (textY < lowestY) {
+                lowestY = textY;
+            }
+            final PDRectangle rectangle = writeText(textX, textY, textLines.get(i), font, fontSize, color);
             if (numOfLines == 1) {
                 actualWidth = rectangle.getWidth();
             }
             approximateHeight += rectangle.getHeight();
         }
-        return new PDRectangle(x, startingY, actualWidth, approximateHeight);
+        return new PDRectangle(leftMostX, lowestY, actualWidth, approximateHeight);
     }
 
     public PDRectangle writeWrappedText(final float x, final float y, final float width, final String text, final PDFont font, final float fontSize, final Color color) throws IOException {
@@ -134,14 +144,19 @@ public class PDFBoxManager implements Closeable {
         final int numOfLines = textLines.size();
         float actualWidth = width;
         float approximateHeight = 0F;
+        float lowestY = startingY;
         for (int i = 0; i < numOfLines; i++) {
-            final PDRectangle rectangle = writeText(x, startingY - (i * fontSize), textLines.get(i), font, fontSize, color);
+            final float textY = startingY - (i * fontSize);
+            if (textY < lowestY) {
+                lowestY = textY;
+            }
+            final PDRectangle rectangle = writeText(x, textY, textLines.get(i), font, fontSize, color);
             if (numOfLines == 1) {
                 actualWidth = rectangle.getWidth();
             }
             approximateHeight += rectangle.getHeight();
         }
-        return new PDRectangle(x, startingY, actualWidth, approximateHeight);
+        return new PDRectangle(x, lowestY, actualWidth, approximateHeight);
     }
 
     public PDRectangle writeLink(final float x, final float y, final String linkText, final String linkURL, final PDFont font, final float fontSize) throws IOException {

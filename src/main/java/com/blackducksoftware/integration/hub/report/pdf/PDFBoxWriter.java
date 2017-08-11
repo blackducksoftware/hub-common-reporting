@@ -177,7 +177,7 @@ public class PDFBoxWriter {
             pdfManager.drawImage(15, rowY, 8, 8, "/riskreport/web/images/cross_through_circle.png");
         }
         PDRectangle rectangle = pdfManager.writeWrappedLink(30, rowY, componentNameWidth, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeWrappedCenteredLink(rectangle.getLowerLeftX() + 180, rowY, componentVersionWidth, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeWrappedCenteredLink(rectangle.getLowerLeftX() + 180, rowY, componentVersionWidth, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
 
         boolean hasLicenseRisk = true;
         String licenseRisk = "-";
@@ -196,11 +196,11 @@ public class PDFBoxWriter {
         }
 
         if (hasLicenseRisk) {
-            pdfManager.drawRectangle(rectangle.getLowerLeftX() + 66, rowY - 2, 12, 12, licenseRiskColor);
-            pdfManager.writeText(rectangle.getLowerLeftX() + 68, rowY, licenseRisk);
+            pdfManager.drawRectangle(rectangle.getLowerLeftX() + 246, rowY - 2, 12, 12, licenseRiskColor);
+            pdfManager.writeText(rectangle.getLowerLeftX() + 248, rowY, licenseRisk);
         }
 
-        rectangle = pdfManager.writeWrappedText(rectangle.getLowerLeftX() + 80, rowY, componentLicenseWidth, componentLicenseTextLines);
+        rectangle = pdfManager.writeWrappedText(rectangle.getLowerLeftX() + 260, rowY, componentLicenseWidth, componentLicenseTextLines);
         pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 144, rowY, String.valueOf(component.getSecurityRiskHighCount()));
         pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 187, rowY, String.valueOf(component.getSecurityRiskMediumCount()));
         pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 230, rowY, String.valueOf(component.getSecurityRiskLowCount()));
