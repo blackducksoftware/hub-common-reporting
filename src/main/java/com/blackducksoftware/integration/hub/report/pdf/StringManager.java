@@ -35,55 +35,6 @@ import com.blackducksoftware.integration.hub.report.pdf.util.PDFBoxManager;
 
 public class StringManager {
 
-    public static final int DEFAULT_CHAR_LENGTH = 20;
-
-    public static String wrap(final String str, final int charLimit) {
-        final ArrayList<String> subWords = new ArrayList<>(Arrays.asList(str.split(" ")));
-        for (int i = 0; i < subWords.size(); i++) {
-            final String currentSubWord = subWords.get(i);
-            if (subWords.get(i).length() > charLimit) {
-                subWords.remove(currentSubWord);
-                subWords.addAll(i, modifyWrapString(currentSubWord, charLimit));
-            }
-        }
-        return StringUtils.joinWith(" ", subWords.toArray());
-    }
-
-    public static String wrap(final String str) {
-        final ArrayList<String> subWords = new ArrayList<>(Arrays.asList(str.split(" ")));
-        for (int i = 0; i < subWords.size(); i++) {
-            final String currentWord = subWords.get(i);
-            if (currentWord.length() > DEFAULT_CHAR_LENGTH) {
-                subWords.remove(currentWord);
-                subWords.addAll(i, modifyWrapString(currentWord, DEFAULT_CHAR_LENGTH));
-            }
-        }
-        return StringUtils.joinWith(" ", subWords.toArray());
-    }
-
-    public static List<String> modifyWrapString(final String str, final int charLimit) {
-        int lastBreak = 0;
-        int maxLengthCounter = 0;
-        final int strLen = str.length();
-        final ArrayList<String> brokenUpStrings = new ArrayList<>();
-        for (int i = 0; i < strLen; i++) {
-            if (!StringUtils.isAlphanumeric(str.charAt(i) + "") || maxLengthCounter == charLimit) {
-                brokenUpStrings.add(str.substring(lastBreak, i));
-                lastBreak = i;
-                maxLengthCounter = 0;
-            } else {
-                maxLengthCounter++;
-            }
-
-            if (brokenUpStrings.size() > 0 && strLen - i < charLimit) {
-                brokenUpStrings.add(str.substring(i, strLen));
-                break;
-            }
-        }
-
-        return brokenUpStrings;
-    }
-
     public static List<String> wrapToCombinedList(final String str, final int charLimit) throws IOException {
         return wrapToCombinedList(PDFBoxManager.DEFAULT_FONT, PDFBoxManager.DEFAULT_FONT_SIZE, str, charLimit);
     }
