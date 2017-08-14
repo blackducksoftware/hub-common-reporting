@@ -43,7 +43,7 @@ public class PDFBoxWriter {
     }
 
     public File createPDFReportFile(final File outputDirectory, final ReportData report) throws RiskReportException {
-        final File pdfFile = new File(outputDirectory, "testRiskReport.pdf");
+        final File pdfFile = new File(outputDirectory, report.getProjectName() + "_BlackDuck_RiskReport.pdf");
         if (pdfFile.exists()) {
             pdfFile.delete();
         }
@@ -122,18 +122,18 @@ public class PDFBoxWriter {
         // new Color(221, 221, 221)
         final float height = startingHeight - 20;
 
-        PDRectangle rectangle = pdfManager.writeText(30, height, "BOM Entries " + reportData.getTotalComponents());
+        final PDRectangle rectangle = pdfManager.writeText(30, height, "BOM Entries " + reportData.getTotalComponents());
 
         // header row
         PDRectangle rowRectangle = pdfManager.drawRectangle(10, rectangle.getLowerLeftY() - 22, pageWidth - 20, 18, new Color(221, 221, 221));
         final float rowY = rowRectangle.getLowerLeftY() + 5;
-        rectangle = pdfManager.writeText(50, rowY, "Component", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 140, rowY, "Version", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 120, rowY, "License", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 120, rowY, "H", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 40, rowY, "M", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 40, rowY, "L", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
-        rectangle = pdfManager.writeText(rectangle.getLowerLeftX() + 40, rowY, "Opt R", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(50, rowY, "Component", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(190, rowY, "Version", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(310, rowY, "License", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(430, rowY, "H", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(470, rowY, "M", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(510, rowY, "L", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeText(550, rowY, "Opt R", PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
 
         boolean isOdd = false;
         for (final BomComponent component : reportData.getComponents()) {
@@ -172,7 +172,6 @@ public class PDFBoxWriter {
             rowRectangle = pdfManager.drawRectangle(10, y - rowHeight, pageWidth - 20, rowHeight, rowColor);
         }
 
-        final float rowY = rowRectangle.getUpperRightY() - 5 - PDFBoxManager.DEFAULT_FONT_SIZE;
         final float rowUpperY = rowRectangle.getUpperRightY();
         if (component.getPolicyStatus().equalsIgnoreCase("IN_VIOLATION")) {
             pdfManager.drawImageCentered(15, rowUpperY, 8, 8, 0, rowHeight, "/riskreport/web/images/cross_through_circle.png");
