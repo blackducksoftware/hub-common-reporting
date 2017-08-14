@@ -281,8 +281,12 @@ public class PDFBoxManager implements Closeable {
         return new PDRectangle(x, startingY, width, height);
     }
 
+    // private void stuff(){
+    // currentPage.
+    // }
+
     private float checkYAndSwitchPage(final float y, final float height) throws IOException {
-        if (y < 0) {
+        if (y - 20 < 0) {
             contentStream.close();
             this.currentPage = new PDPage();
             document.addPage(currentPage);
