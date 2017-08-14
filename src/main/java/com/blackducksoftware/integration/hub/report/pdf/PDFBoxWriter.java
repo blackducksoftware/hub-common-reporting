@@ -173,11 +173,12 @@ public class PDFBoxWriter {
         }
 
         final float rowY = rowRectangle.getUpperRightY() - 5 - PDFBoxManager.DEFAULT_FONT_SIZE;
+        final float rowUpperY = rowRectangle.getUpperRightY();
         if (component.getPolicyStatus().equalsIgnoreCase("IN_VIOLATION")) {
-            pdfManager.drawImage(15, rowY, 8, 8, "/riskreport/web/images/cross_through_circle.png");
+            pdfManager.drawImageCentered(15, rowUpperY, 8, 8, 0, rowHeight, "/riskreport/web/images/cross_through_circle.png");
         }
-        PDRectangle rectangle = pdfManager.writeWrappedLink(30, rowY, componentNameWidth, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
-        pdfManager.writeWrappedCenteredLink(rectangle.getLowerLeftX() + 180, rowY, componentVersionWidth, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeWrappedCenteredLink(210, rowUpperY, componentVersionWidth, rowHeight, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
 
         boolean hasLicenseRisk = true;
         String licenseRisk = "-";
@@ -196,14 +197,14 @@ public class PDFBoxWriter {
         }
 
         if (hasLicenseRisk) {
-            pdfManager.drawRectangle(rectangle.getLowerLeftX() + 246, rowY - 2, 12, 12, licenseRiskColor);
-            pdfManager.writeText(rectangle.getLowerLeftX() + 248, rowY, licenseRisk);
+            pdfManager.drawRectangleCentered(282, rowUpperY - 1, 12, 12, rowHeight, licenseRiskColor);
+            pdfManager.writeTextCentered(282, rowUpperY, rowHeight, licenseRisk);
         }
 
-        rectangle = pdfManager.writeWrappedText(rectangle.getLowerLeftX() + 260, rowY, componentLicenseWidth, componentLicenseTextLines);
-        pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 144, rowY, String.valueOf(component.getSecurityRiskHighCount()));
-        pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 187, rowY, String.valueOf(component.getSecurityRiskMediumCount()));
-        pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 230, rowY, String.valueOf(component.getSecurityRiskLowCount()));
+        pdfManager.writeWrappedVerticalCenteredText(290, rowUpperY, componentLicenseWidth, rowHeight, componentLicenseTextLines);
+        pdfManager.writeTextCentered(434, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskHighCount()));
+        pdfManager.writeTextCentered(477, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskMediumCount()));
+        pdfManager.writeTextCentered(520, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskLowCount()));
 
         String operationalRisk = "-";
         Color operationalRiskColor = rowColor;
@@ -217,8 +218,8 @@ public class PDFBoxWriter {
             operationalRisk = "L";
             operationalRiskColor = new Color(153, 153, 153);
         }
-        pdfManager.drawRectangle(rectangle.getLowerLeftX() + 255, rowRectangle.getLowerLeftY(), 60, rowHeight, operationalRiskColor);
-        pdfManager.writeTextCentered(rectangle.getLowerLeftX() + 285, rowY, operationalRisk, PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.drawRectangle(545, rowRectangle.getLowerLeftY(), 60, rowHeight, operationalRiskColor);
+        pdfManager.writeTextCentered(575, rowUpperY, rowHeight, operationalRisk, PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
 
         return rowRectangle;
     }
