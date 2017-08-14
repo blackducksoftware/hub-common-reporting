@@ -47,7 +47,7 @@ public class PDFBoxWriter {
         if (pdfFile.exists()) {
             pdfFile.delete();
         }
-        try (PDFBoxManager pdfManager = new PDFBoxManager(pdfFile, new PDDocument())) {
+        try (PDFBoxManager pdfManager = new PDFBoxManager(logger, pdfFile, new PDDocument())) {
             this.pdfManager = pdfManager;
             final PDRectangle pageBox = pdfManager.currentPage.getMediaBox();
             final float pageWidth = pageBox.getWidth();
@@ -60,7 +60,9 @@ public class PDFBoxWriter {
 
             return pdfFile;
         } catch (final IOException | URISyntaxException e) {
-            throw new RiskReportException("Couldn't create the report: " + e.getMessage(), e);
+            final String errorString = "Couldn't create the report: ";
+            logger.trace(errorString + e.getMessage(), e);
+            throw new RiskReportException(errorString + e.getMessage(), e);
         }
     }
 
@@ -68,6 +70,7 @@ public class PDFBoxWriter {
         final PDRectangle rectangle = pdfManager.drawRectangle(0, startingHeight - 100, pageWidth, 100, Color.BLACK);
         pdfManager.drawImage(pageWidth - 220, rectangle.getLowerLeftY() + 27.5F, 203, 45, "/riskreport/web/images/Hub_BD_logo.png");
         pdfManager.writeText(5, rectangle.getLowerLeftY() + 40F, "Black Duck Risk Report", PDFBoxManager.DEFAULT_FONT_BOLD, 20, Color.WHITE);
+        logger.trace("Finished writing the pdf header.");
         return rectangle;
     }
 
@@ -80,7 +83,7 @@ public class PDFBoxWriter {
 
         final String projectAttributesString = "Phase:  " + reportData.getPhase() + "    |    Distribution:  " + reportData.getDistribution();
         rectangle = pdfManager.writeWrappedText(5, rectangle.getLowerLeftY() - 18, 300, projectAttributesString);
-
+        logger.trace("Finished writing the project information.");
         return rectangle;
     }
 
@@ -93,8 +96,10 @@ public class PDFBoxWriter {
                 reportData.getVulnerabilityRiskNoneCount(), reportData.getTotalComponents());
         writeSummaryTable(center, height, "License Risk", reportData.getLicenseRiskHighCount(), reportData.getLicenseRiskMediumCount(), reportData.getLicenseRiskLowCount(), reportData.getLicenseRiskNoneCount(),
                 reportData.getTotalComponents());
-        return writeSummaryTable(center + 180, height, "Operational Risk", reportData.getOperationalRiskHighCount(), reportData.getOperationalRiskMediumCount(), reportData.getOperationalRiskLowCount(),
+        final PDRectangle rectangle = writeSummaryTable(center + 180, height, "Operational Risk", reportData.getOperationalRiskHighCount(), reportData.getOperationalRiskMediumCount(), reportData.getOperationalRiskLowCount(),
                 reportData.getOperationalRiskNoneCount(), reportData.getTotalComponents());
+        logger.trace("Finished writing the sumary tables.");
+        return rectangle;
     }
 
     private PDRectangle writeSummaryTable(final float centerX, final float y, final String title, final int highCount, final int mediumCount, final int lowCount, final int noneCount, final int totalCount) throws IOException {
@@ -140,7 +145,7 @@ public class PDFBoxWriter {
             rowRectangle = writeComponentRow(pageWidth, rowRectangle.getLowerLeftY(), component, isOdd);
             isOdd = !isOdd;
         }
-
+        logger.trace("Finished writing the component table.");
         return rowRectangle;
     }
 
@@ -179,25 +184,11 @@ public class PDFBoxWriter {
         pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
         pdfManager.writeWrappedCenteredLink(210, rowUpperY, componentVersionWidth, rowHeight, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
 
-        boolean hasLicenseRisk = true;
-        String licenseRisk = "-";
-        Color licenseRiskColor = rowColor;
-        if (component.getLicenseRiskHighCount() > 0) {
-            licenseRisk = "H";
-            licenseRiskColor = decode("#b52b24");
-        } else if (component.getLicenseRiskMediumCount() > 0) {
-            licenseRisk = "M";
-            licenseRiskColor = decode("#eca4a0");
-        } else if (component.getLicenseRiskLowCount() > 0) {
-            licenseRisk = "L";
-            licenseRiskColor = new Color(153, 153, 153);
-        } else {
-            hasLicenseRisk = false;
-        }
+        final Risk licenseRisk = getLicenseRisk(component, rowColor);
 
-        if (hasLicenseRisk) {
-            pdfManager.drawRectangleCentered(282, rowUpperY - 1, 12, 12, rowHeight, licenseRiskColor);
-            pdfManager.writeTextCentered(282, rowUpperY, rowHeight, licenseRisk);
+        if (licenseRisk.riskShortString.equals("-")) {
+            pdfManager.drawRectangleCentered(282, rowUpperY - 1, 12, 12, rowHeight, licenseRisk.riskColor);
+            pdfManager.writeTextCentered(282, rowUpperY, rowHeight, licenseRisk.riskShortString);
         }
 
         pdfManager.writeWrappedVerticalCenteredText(290, rowUpperY, componentLicenseWidth, rowHeight, componentLicenseTextLines);
@@ -205,34 +196,54 @@ public class PDFBoxWriter {
         pdfManager.writeTextCentered(477, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskMediumCount()));
         pdfManager.writeTextCentered(520, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskLowCount()));
 
-        String operationalRisk = "-";
-        Color operationalRiskColor = rowColor;
-        if (component.getOperationalRiskHighCount() > 0) {
-            operationalRisk = "H";
-            operationalRiskColor = decode("#b52b24");
-        } else if (component.getOperationalRiskMediumCount() > 0) {
-            operationalRisk = "M";
-            operationalRiskColor = decode("#eca4a0");
-        } else if (component.getOperationalRiskLowCount() > 0) {
-            operationalRisk = "L";
-            operationalRiskColor = new Color(153, 153, 153);
-        }
-        pdfManager.drawRectangle(545, rowRectangle.getLowerLeftY(), 60, rowHeight, operationalRiskColor);
-        pdfManager.writeTextCentered(575, rowUpperY, rowHeight, operationalRisk, PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
+        final Risk operationalRisk = getOperationalRisk(component, rowColor);
+
+        pdfManager.drawRectangle(545, rowRectangle.getLowerLeftY(), 60, rowHeight, operationalRisk.riskColor);
+        pdfManager.writeTextCentered(575, rowUpperY, rowHeight, operationalRisk.riskShortString, PDFBoxManager.DEFAULT_FONT_BOLD, 12, PDFBoxManager.DEFAULT_COLOR);
 
         return rowRectangle;
     }
 
-    public String licenseRisk(final BomComponent component) {
+    public Risk getLicenseRisk(final BomComponent component, final Color noColor) {
+        final Risk risk = new Risk();
         if (component.getLicenseRiskHighCount() > 0) {
-            return "H";
+            risk.riskShortString = "H";
+            risk.riskColor = decode("#b52b24");
         } else if (component.getLicenseRiskMediumCount() > 0) {
-            return "M";
+            risk.riskShortString = "M";
+            risk.riskColor = decode("#eca4a0");
         } else if (component.getLicenseRiskLowCount() > 0) {
-            return "L";
+            risk.riskShortString = "L";
+            risk.riskColor = new Color(153, 153, 153);
         } else {
-            return "";
+            risk.riskShortString = "-";
+            risk.riskColor = noColor;
         }
+        return risk;
+    }
+
+    public Risk getOperationalRisk(final BomComponent component, final Color noColor) {
+        final Risk risk = new Risk();
+        if (component.getOperationalRiskHighCount() > 0) {
+            risk.riskShortString = "H";
+            risk.riskColor = decode("#b52b24");
+        } else if (component.getOperationalRiskMediumCount() > 0) {
+            risk.riskShortString = "M";
+            risk.riskColor = decode("#eca4a0");
+        } else if (component.getOperationalRiskLowCount() > 0) {
+            risk.riskShortString = "L";
+            risk.riskColor = new Color(153, 153, 153);
+        } else {
+            risk.riskShortString = "-";
+            risk.riskColor = noColor;
+        }
+        return risk;
+    }
+
+    private class Risk {
+        public String riskShortString;
+        public Color riskColor;
+
     }
 
 }

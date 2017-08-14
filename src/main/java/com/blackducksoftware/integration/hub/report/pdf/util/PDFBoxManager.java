@@ -32,8 +32,11 @@ import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 
 import com.blackducksoftware.integration.hub.report.pdf.StringManager;
+import com.blackducksoftware.integration.log.IntLogger;
 
 public class PDFBoxManager implements Closeable {
+    private final IntLogger logger;
+
     public final File outputFile;
     public final PDDocument document;
     public PDPage currentPage;
@@ -44,7 +47,8 @@ public class PDFBoxManager implements Closeable {
     public static final float DEFAULT_FONT_SIZE = 10;
     public static final Color DEFAULT_COLOR = Color.BLACK;
 
-    public PDFBoxManager(final File outputFile, final PDDocument document) throws IOException {
+    public PDFBoxManager(final IntLogger logger, final File outputFile, final PDDocument document) throws IOException {
+        this.logger = logger;
         this.outputFile = outputFile;
         this.document = document;
         this.currentPage = new PDPage();
