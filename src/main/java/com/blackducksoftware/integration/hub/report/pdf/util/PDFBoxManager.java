@@ -290,8 +290,6 @@ public class PDFBoxManager implements Closeable {
         txtLink.setAction(action);
 
         currentPage.getAnnotations().add(txtLink);
-
-        logger.debug("Contents " + txtLink.getContents());
         return new PDRectangle(x, startingY, width, height);
     }
 
