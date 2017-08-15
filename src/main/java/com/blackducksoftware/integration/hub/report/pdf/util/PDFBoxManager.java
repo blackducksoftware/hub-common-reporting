@@ -12,13 +12,14 @@
 package com.blackducksoftware.integration.hub.report.pdf.util;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -27,6 +28,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
@@ -74,10 +76,8 @@ public class PDFBoxManager implements Closeable {
 
     public PDRectangle drawImage(final float x, final float y, final float width, final float height, final String resourceImageName) throws IOException, URISyntaxException {
         final float startingY = checkYAndSwitchPage(y, height);
-        final URL imageURL = getClass().getResource(resourceImageName);
-        final URI imageUri = imageURL.toURI();
-        final File imageFile = new File(imageUri);
-        final PDImageXObject pdImage = PDImageXObject.createFromFileByExtension(imageFile, document);
+        final BufferedImage bufferedImage = ImageIO.read(getClass().getResourceAsStream(resourceImageName));
+        final PDImageXObject pdImage = LosslessFactory.createFromImage(document, bufferedImage);
         contentStream.drawImage(pdImage, x, startingY, width, height);
         return new PDRectangle(x, startingY, width, height);
     }
