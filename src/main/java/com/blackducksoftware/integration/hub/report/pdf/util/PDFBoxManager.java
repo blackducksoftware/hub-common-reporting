@@ -65,6 +65,9 @@ public class PDFBoxManager implements Closeable {
         this.logger = logger;
         this.outputFile = outputFile;
         this.document = document;
+        document.getDocumentInformation().setAuthor("Black Duck Software");
+        document.getDocumentInformation().setCreator("Integrations");
+        document.getDocumentInformation().setSubject("Hub Risk Report");
         this.currentPage = new PDPage();
         document.addPage(currentPage);
         contentStream = new PDPageContentStream(document, currentPage, AppendMode.APPEND, true, false);
