@@ -15,7 +15,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.blackducksoftware.integration.hub.report.api.ReportData;
@@ -26,7 +25,7 @@ import com.google.gson.Gson;
 
 public class PDFBoxTest {
 
-    @Ignore
+    // @Ignore
     @Test
     public void testCreatePDFReportFile() throws Exception {
         final String reportDataString = IOUtils.toString(getClass().getResourceAsStream("/TestReportData.json"), StandardCharsets.UTF_8);

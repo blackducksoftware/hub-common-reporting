@@ -278,12 +278,10 @@ public class PDFBoxManager implements Closeable {
         txtLink.setAction(action);
 
         currentPage.getAnnotations().add(txtLink);
+
+        logger.debug("Contents " + txtLink.getContents());
         return new PDRectangle(x, startingY, width, height);
     }
-
-    // private void stuff(){
-    // currentPage.
-    // }
 
     private float checkYAndSwitchPage(final float y, final float height) throws IOException {
         if (y - 20 < 0) {

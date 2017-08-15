@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
@@ -178,7 +179,7 @@ public class PDFBoxWriter {
         }
 
         final float rowUpperY = rowRectangle.getUpperRightY();
-        if (component.getPolicyStatus().equalsIgnoreCase("IN_VIOLATION")) {
+        if (StringUtils.isNotBlank(component.getPolicyStatus()) && component.getPolicyStatus().equalsIgnoreCase("IN_VIOLATION")) {
             pdfManager.drawImageCentered(15, rowUpperY, 8, 8, 0, rowHeight, "/riskreport/web/images/cross_through_circle.png");
         }
         pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
@@ -186,7 +187,7 @@ public class PDFBoxWriter {
 
         final Risk licenseRisk = getLicenseRisk(component, rowColor);
 
-        if (licenseRisk.riskShortString.equals("-")) {
+        if (StringUtils.isNotBlank(licenseRisk.riskShortString)) {
             pdfManager.drawRectangleCentered(282, rowUpperY - 1, 12, 12, rowHeight, licenseRisk.riskColor);
             pdfManager.writeTextCentered(282, rowUpperY, rowHeight, licenseRisk.riskShortString);
         }
@@ -206,6 +207,8 @@ public class PDFBoxWriter {
 
     public Risk getLicenseRisk(final BomComponent component, final Color noColor) {
         final Risk risk = new Risk();
+        risk.riskShortString = "";
+        risk.riskColor = noColor;
         if (component.getLicenseRiskHighCount() > 0) {
             risk.riskShortString = "H";
             risk.riskColor = decode("#b52b24");
@@ -215,15 +218,14 @@ public class PDFBoxWriter {
         } else if (component.getLicenseRiskLowCount() > 0) {
             risk.riskShortString = "L";
             risk.riskColor = new Color(153, 153, 153);
-        } else {
-            risk.riskShortString = "-";
-            risk.riskColor = noColor;
         }
         return risk;
     }
 
     public Risk getOperationalRisk(final BomComponent component, final Color noColor) {
         final Risk risk = new Risk();
+        risk.riskShortString = "-";
+        risk.riskColor = noColor;
         if (component.getOperationalRiskHighCount() > 0) {
             risk.riskShortString = "H";
             risk.riskColor = decode("#b52b24");
@@ -233,9 +235,6 @@ public class PDFBoxWriter {
         } else if (component.getOperationalRiskLowCount() > 0) {
             risk.riskShortString = "L";
             risk.riskColor = new Color(153, 153, 153);
-        } else {
-            risk.riskShortString = "-";
-            risk.riskColor = noColor;
         }
         return risk;
     }
