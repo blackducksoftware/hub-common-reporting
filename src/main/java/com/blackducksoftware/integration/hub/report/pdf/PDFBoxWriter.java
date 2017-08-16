@@ -40,6 +40,7 @@ import com.blackducksoftware.integration.hub.report.api.ReportData;
 import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
 import com.blackducksoftware.integration.hub.report.pdf.util.PDFBoxManager;
 import com.blackducksoftware.integration.log.IntLogger;
+import com.blackducksoftware.integration.util.IntegrationEscapeUtil;
 
 public class PDFBoxWriter {
     private final IntLogger logger;
@@ -56,7 +57,10 @@ public class PDFBoxWriter {
     }
 
     public File createPDFReportFile(final File outputDirectory, final ReportData report) throws RiskReportException {
-        final File pdfFile = new File(outputDirectory, report.getProjectName() + "_BlackDuck_RiskReport.pdf");
+        final IntegrationEscapeUtil escapeUtil = new IntegrationEscapeUtil();
+        final String escapedProjectName = escapeUtil.escapeForUri(report.getProjectName());
+        final String escapedProjectVersionName = escapeUtil.escapeForUri(report.getProjectVersion());
+        final File pdfFile = new File(outputDirectory, escapedProjectName + "_" + escapedProjectVersionName + "_BlackDuck_RiskReport.pdf");
         if (pdfFile.exists()) {
             pdfFile.delete();
         }
