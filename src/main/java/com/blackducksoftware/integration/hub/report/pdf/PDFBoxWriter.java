@@ -136,7 +136,9 @@ public class PDFBoxWriter {
         pdfManager.writeTextCentered(centerX, rowY, countString);
 
         final float barX = centerX + 20;
-        pdfManager.drawRectangle(barX, rowY, (count / totalCount) * 60, 10, barColor);
+        if (count > 0) {
+            pdfManager.drawRectangle(barX, rowY, (count / totalCount) * 60, 10, barColor);
+        }
         return rectangle;
     }
 
