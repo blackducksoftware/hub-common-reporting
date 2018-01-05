@@ -2,10 +2,11 @@ language: java
 
 jdk:
   - oraclejdk8
-    
+
 install: true
+
 script:
-- mvn -U clean package 
-  
+  - ./gradlew clean build
+
 after_success:
-- mvn jacoco:report coveralls:report 
+  - ./gradlew test jacocoTestReport coveralls
