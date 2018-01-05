@@ -10,3 +10,4 @@ script:
 
 after_success:
   - ./gradlew test jacocoTestReport coveralls
+  - bash <(curl -s https://copilot.blackducksoftware.com/ci/travis/scripts/upload)
