@@ -48,7 +48,7 @@ public class PDFBoxTest {
         writer.createPDFReportFile(new File("."), reportData);
     }
 
-    @Ignore
+    // @Ignore
     @Test
     public void testCreateWeirdPDFReportFile() throws Exception {
         final String reportDataString = IOUtils.toString(getClass().getResourceAsStream("/TestReportDataWeird.json"), StandardCharsets.UTF_8);
