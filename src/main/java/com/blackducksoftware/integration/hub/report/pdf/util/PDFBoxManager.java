@@ -125,7 +125,7 @@ public class PDFBoxManager implements Closeable {
         contentStream.setFont(font, fontSize);
         contentStream.setNonStrokingColor(textColor);
         contentStream.newLineAtOffset(x, startingY);
-        final String fixedText = StringManager.removeUnsupportedCharacters(text);
+        final String fixedText = StringManager.replaceUnsupportedCharacters(text);
         contentStream.showText(fixedText);
         contentStream.endText();
         return new PDRectangle(x, startingY, StringManager.getStringWidth(font, fontSize, fixedText), fontSize);

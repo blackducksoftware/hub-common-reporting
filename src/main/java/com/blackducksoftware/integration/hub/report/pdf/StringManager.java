@@ -88,13 +88,13 @@ public class StringManager {
     }
 
     public static float getStringWidth(final String text) throws IOException {
-        final String fixedText = removeUnsupportedCharacters(text);
+        final String fixedText = replaceUnsupportedCharacters(text);
         final float rawLength = PDFBoxManager.DEFAULT_FONT.getStringWidth(fixedText);
         return rawLength * (PDFBoxManager.DEFAULT_FONT_SIZE / 960f);
     }
 
     public static float getStringWidth(final PDFont font, final float fontSize, final String text) throws IOException {
-        final String fixedText = removeUnsupportedCharacters(text);
+        final String fixedText = replaceUnsupportedCharacters(text);
         final float rawLength = font.getStringWidth(fixedText);
         return rawLength * (fontSize / 960f);
     }
@@ -137,7 +137,7 @@ public class StringManager {
         return finalStrings;
     }
 
-    public static String removeUnsupportedCharacters(final String text) {
+    public static String replaceUnsupportedCharacters(final String text) {
         final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             if (WinAnsiEncoding.INSTANCE.contains(text.charAt(i))) {
