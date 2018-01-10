@@ -125,9 +125,10 @@ public class PDFBoxManager implements Closeable {
         contentStream.setFont(font, fontSize);
         contentStream.setNonStrokingColor(textColor);
         contentStream.newLineAtOffset(x, startingY);
-        contentStream.showText(text);
+        final String fixedText = text.replace("\uFFFD", "?");
+        contentStream.showText(fixedText);
         contentStream.endText();
-        return new PDRectangle(x, startingY, StringManager.getStringWidth(font, fontSize, text), fontSize);
+        return new PDRectangle(x, startingY, StringManager.getStringWidth(font, fontSize, fixedText), fontSize);
     }
 
     public PDRectangle writeWrappedText(final float x, final float y, final float width, final String text) throws IOException {

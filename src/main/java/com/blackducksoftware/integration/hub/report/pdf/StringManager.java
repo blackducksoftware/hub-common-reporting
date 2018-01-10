@@ -87,12 +87,14 @@ public class StringManager {
     }
 
     public static float getStringWidth(final String text) throws IOException {
-        final float rawLength = PDFBoxManager.DEFAULT_FONT.getStringWidth(text);
+        final String fixedText = text.replace("\uFFFD", "?");
+        final float rawLength = PDFBoxManager.DEFAULT_FONT.getStringWidth(fixedText);
         return rawLength * (PDFBoxManager.DEFAULT_FONT_SIZE / 960f);
     }
 
     public static float getStringWidth(final PDFont font, final float fontSize, final String text) throws IOException {
-        final float rawLength = font.getStringWidth(text);
+        final String fixedText = text.replace("\uFFFD", "?");
+        final float rawLength = font.getStringWidth(fixedText);
         return rawLength * (fontSize / 960f);
     }
 
