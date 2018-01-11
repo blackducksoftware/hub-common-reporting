@@ -7,11 +7,11 @@ buildscript {
     dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
 }
 
-version = '3.0.1-SNAPSHOT'
+version = '4.0.0'
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
 dependencies {
-    compile 'com.blackducksoftware.integration:integration-common:8.2.0'
+    compile 'com.blackducksoftware.integration:integration-common:9.0.0'
     compile 'org.apache.pdfbox:pdfbox:2.0.7'
 }
