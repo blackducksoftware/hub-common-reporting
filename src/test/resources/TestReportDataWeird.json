@@ -1,0 +1,40 @@
+{
+  "projectName": "ReportingProject ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+  "projectURL": "http://int-auto01.dc1.lan:9000#projects/id:1412f685-0a08-4471-b30d-95e4952f1c5e",
+  "projectVersion": "1 ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+  "projectVersionURL": "http://int-auto01.dc1.lan:9000#versions/id:73387663-5411-4185-b1a7-688683eac931/view:bom",
+  "phase": "DEVELOPMENT ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+  "distribution": "EXTERNAL ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+  "components": [
+    {
+      "policyStatus": "NOT_IN_VIOLATION",
+      "componentName": "Made Up ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD ",
+      "componentURL": "http://int-auto01.dc1.lan:9000#projects/id:15e2f588-ef74-4461-8854-fd49fa16f792",
+      "componentVersion": "1.0.7 ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+      "componentVersionURL": "http://int-auto01.dc1.lan:9000#versions/id:faea231e-84dc-45b7-851b-d4f72536ddbc",
+      "license": "Apache License 2.0 ? ! @ # $ % ^ & * & * ( ) { }  [ ] ; : < > \uFFFD",
+      "securityRiskHighCount": 0,
+      "securityRiskMediumCount": 0,
+      "securityRiskLowCount": 0,
+      "licenseRiskHighCount": 0,
+      "licenseRiskMediumCount": 0,
+      "licenseRiskLowCount": 0,
+      "operationalRiskHighCount": 0,
+      "operationalRiskMediumCount": 0,
+      "operationalRiskLowCount": 0
+    }
+  ],
+  "totalComponents": 1,
+  "vulnerabilityRiskHighCount": 0,
+  "vulnerabilityRiskMediumCount": 0,
+  "vulnerabilityRiskLowCount": 0,
+  "vulnerabilityRiskNoneCount": 0,
+  "licenseRiskHighCount": 0,
+  "licenseRiskMediumCount": 0,
+  "licenseRiskLowCount": 0,
+  "licenseRiskNoneCount": 0,
+  "operationalRiskHighCount": 0,
+  "operationalRiskMediumCount": 0,
+  "operationalRiskLowCount": 0,
+  "operationalRiskNoneCount": 0 
+}

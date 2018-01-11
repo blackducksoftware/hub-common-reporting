@@ -47,4 +47,14 @@ public class PDFBoxTest {
         final PDFBoxWriter writer = new PDFBoxWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
         writer.createPDFReportFile(new File("."), reportData);
     }
+
+    @Ignore
+    @Test
+    public void testCreateWeirdPDFReportFile() throws Exception {
+        final String reportDataString = IOUtils.toString(getClass().getResourceAsStream("/TestReportDataWeird.json"), StandardCharsets.UTF_8);
+        final Gson gson = new Gson();
+        final ReportData reportData = gson.fromJson(reportDataString, ReportData.class);
+        final PDFBoxWriter writer = new PDFBoxWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
+        writer.createPDFReportFile(new File("."), reportData);
+    }
 }
