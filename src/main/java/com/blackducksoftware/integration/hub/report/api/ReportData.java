@@ -25,8 +25,8 @@ package com.blackducksoftware.integration.hub.report.api;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class ReportData {
     private String projectName;
@@ -68,53 +68,6 @@ public class ReportData {
     private int operationalRiskLowCount;
 
     private int operationalRiskNoneCount;
-
-    public void setComponents(final List<BomComponent> components) {
-        this.components = components;
-
-        vulnerabilityRiskHighCount = 0;
-        vulnerabilityRiskMediumCount = 0;
-        vulnerabilityRiskLowCount = 0;
-
-        licenseRiskHighCount = 0;
-        licenseRiskMediumCount = 0;
-        licenseRiskLowCount = 0;
-
-        operationalRiskHighCount = 0;
-        operationalRiskMediumCount = 0;
-        operationalRiskLowCount = 0;
-
-        for (final BomComponent component : components) {
-            if (component != null) {
-                if (component.getSecurityRiskHighCount() > 0) {
-                    vulnerabilityRiskHighCount++;
-                } else if (component.getSecurityRiskMediumCount() > 0) {
-                    vulnerabilityRiskMediumCount++;
-                } else if (component.getSecurityRiskLowCount() > 0) {
-                    vulnerabilityRiskLowCount++;
-                }
-                if (component.getLicenseRiskHighCount() > 0) {
-                    licenseRiskHighCount++;
-                } else if (component.getLicenseRiskMediumCount() > 0) {
-                    licenseRiskMediumCount++;
-                } else if (component.getLicenseRiskLowCount() > 0) {
-                    licenseRiskLowCount++;
-                }
-                if (component.getOperationalRiskHighCount() > 0) {
-                    operationalRiskHighCount++;
-                } else if (component.getOperationalRiskMediumCount() > 0) {
-                    operationalRiskMediumCount++;
-                } else if (component.getOperationalRiskLowCount() > 0) {
-                    operationalRiskLowCount++;
-                }
-            }
-        }
-        totalComponents = components.size();
-
-        vulnerabilityRiskNoneCount = totalComponents - vulnerabilityRiskHighCount - vulnerabilityRiskMediumCount - vulnerabilityRiskLowCount;
-        licenseRiskNoneCount = totalComponents - licenseRiskHighCount - licenseRiskMediumCount - licenseRiskLowCount;
-        operationalRiskNoneCount = totalComponents - operationalRiskHighCount - operationalRiskMediumCount - operationalRiskLowCount;
-    }
 
     public String htmlEscape(final String valueToEscape) {
         if (StringUtils.isBlank(valueToEscape)) {
@@ -225,6 +178,53 @@ public class ReportData {
 
     public List<BomComponent> getComponents() {
         return components;
+    }
+
+    public void setComponents(final List<BomComponent> components) {
+        this.components = components;
+
+        vulnerabilityRiskHighCount = 0;
+        vulnerabilityRiskMediumCount = 0;
+        vulnerabilityRiskLowCount = 0;
+
+        licenseRiskHighCount = 0;
+        licenseRiskMediumCount = 0;
+        licenseRiskLowCount = 0;
+
+        operationalRiskHighCount = 0;
+        operationalRiskMediumCount = 0;
+        operationalRiskLowCount = 0;
+
+        for (final BomComponent component : components) {
+            if (component != null) {
+                if (component.getSecurityRiskHighCount() > 0) {
+                    vulnerabilityRiskHighCount++;
+                } else if (component.getSecurityRiskMediumCount() > 0) {
+                    vulnerabilityRiskMediumCount++;
+                } else if (component.getSecurityRiskLowCount() > 0) {
+                    vulnerabilityRiskLowCount++;
+                }
+                if (component.getLicenseRiskHighCount() > 0) {
+                    licenseRiskHighCount++;
+                } else if (component.getLicenseRiskMediumCount() > 0) {
+                    licenseRiskMediumCount++;
+                } else if (component.getLicenseRiskLowCount() > 0) {
+                    licenseRiskLowCount++;
+                }
+                if (component.getOperationalRiskHighCount() > 0) {
+                    operationalRiskHighCount++;
+                } else if (component.getOperationalRiskMediumCount() > 0) {
+                    operationalRiskMediumCount++;
+                } else if (component.getOperationalRiskLowCount() > 0) {
+                    operationalRiskLowCount++;
+                }
+            }
+        }
+        totalComponents = components.size();
+
+        vulnerabilityRiskNoneCount = totalComponents - vulnerabilityRiskHighCount - vulnerabilityRiskMediumCount - vulnerabilityRiskLowCount;
+        licenseRiskNoneCount = totalComponents - licenseRiskHighCount - licenseRiskMediumCount - licenseRiskLowCount;
+        operationalRiskNoneCount = totalComponents - operationalRiskHighCount - operationalRiskMediumCount - operationalRiskLowCount;
     }
 
 }

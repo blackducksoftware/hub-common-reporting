@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.blackducksoftware.integration.hub.report.api.ReportData;
-import com.blackducksoftware.integration.hub.report.pdf.PDFBoxWriter;
+import com.blackducksoftware.integration.hub.report.pdf.RiskReportPdfWriter;
 import com.blackducksoftware.integration.log.LogLevel;
 import com.blackducksoftware.integration.log.PrintStreamIntLogger;
 import com.google.gson.Gson;
@@ -44,7 +44,7 @@ public class PDFBoxTest {
         final String reportDataString = IOUtils.toString(getClass().getResourceAsStream("/TestReportData.json"), StandardCharsets.UTF_8);
         final Gson gson = new Gson();
         final ReportData reportData = gson.fromJson(reportDataString, ReportData.class);
-        final PDFBoxWriter writer = new PDFBoxWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
+        final RiskReportPdfWriter writer = new RiskReportPdfWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
         writer.createPDFReportFile(new File("."), reportData);
     }
 
@@ -54,7 +54,7 @@ public class PDFBoxTest {
         final String reportDataString = IOUtils.toString(getClass().getResourceAsStream("/TestReportDataWeird.json"), StandardCharsets.UTF_8);
         final Gson gson = new Gson();
         final ReportData reportData = gson.fromJson(reportDataString, ReportData.class);
-        final PDFBoxWriter writer = new PDFBoxWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
+        final RiskReportPdfWriter writer = new RiskReportPdfWriter(new PrintStreamIntLogger(System.out, LogLevel.DEBUG));
         writer.createPDFReportFile(new File("."), reportData);
     }
 }

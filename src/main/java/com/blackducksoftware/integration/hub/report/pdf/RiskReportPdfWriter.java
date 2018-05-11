@@ -25,7 +25,7 @@ package com.blackducksoftware.integration.hub.report.pdf;
 
 import static java.awt.Color.decode;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -38,11 +38,12 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import com.blackducksoftware.integration.hub.report.api.BomComponent;
 import com.blackducksoftware.integration.hub.report.api.ReportData;
 import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
-import com.blackducksoftware.integration.hub.report.pdf.util.PDFBoxManager;
 import com.blackducksoftware.integration.log.IntLogger;
+import com.blackducksoftware.integration.pdf.PDFBoxManager;
+import com.blackducksoftware.integration.pdf.StringManager;
 import com.blackducksoftware.integration.util.IntegrationEscapeUtil;
 
-public class PDFBoxWriter {
+public class RiskReportPdfWriter {
     private final IntLogger logger;
 
     private final String HIGH_RISK = "High Risk";
@@ -52,7 +53,7 @@ public class PDFBoxWriter {
 
     private PDFBoxManager pdfManager;
 
-    public PDFBoxWriter(final IntLogger logger) {
+    public RiskReportPdfWriter(final IntLogger logger) {
         this.logger = logger;
     }
 
@@ -64,7 +65,12 @@ public class PDFBoxWriter {
         if (pdfFile.exists()) {
             pdfFile.delete();
         }
-        try (PDFBoxManager pdfManager = new PDFBoxManager(logger, pdfFile, new PDDocument())) {
+        PDDocument document = new PDDocument();
+        document.getDocumentInformation().setAuthor("Black Duck Software");
+        document.getDocumentInformation().setCreator("Integrations");
+        document.getDocumentInformation().setSubject("Hub Risk Report");
+
+        try (PDFBoxManager pdfManager = new PDFBoxManager(logger, pdfFile, document)) {
             this.pdfManager = pdfManager;
             final PDRectangle pageBox = pdfManager.currentPage.getMediaBox();
             final float pageWidth = pageBox.getWidth();

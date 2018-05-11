@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.blackducksoftware.integration.pdf.JarResourceCopier;
+
 public class RiskReportResourceCopier extends JarResourceCopier {
     public final static String JSON_TOKEN_TO_REPLACE = "TOKEN_RISK_REPORT_JSON_TOKEN";
 
