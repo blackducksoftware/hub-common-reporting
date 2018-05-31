@@ -29,6 +29,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -167,8 +168,10 @@ public class RiskReportPdfWriter {
 
         boolean isOdd = false;
         for (final BomComponent component : reportData.getComponents()) {
-            rowRectangle = writeComponentRow(pageWidth, rowRectangle.getLowerLeftY(), component, isOdd);
-            isOdd = !isOdd;
+            if(null != component) {
+                rowRectangle = writeComponentRow(pageWidth, rowRectangle.getLowerLeftY(), component, isOdd);
+                isOdd = !isOdd;
+            }
         }
         logger.trace("Finished writing the component table.");
         return rowRectangle;
@@ -179,9 +182,19 @@ public class RiskReportPdfWriter {
         final float componentVersionWidth = 115F;
         final float componentLicenseWidth = 150F;
 
-        final List<String> componentNameTextLines = StringManager.wrapToCombinedList(component.getComponentName(), Math.round(componentNameWidth));
-        final List<String> componentVersionTextLines = StringManager.wrapToCombinedList(component.getComponentVersion(), Math.round(componentNameWidth));
-        final List<String> componentLicenseTextLines = StringManager.wrapToCombinedList(component.getLicense(), Math.round(componentNameWidth));
+         List<String> componentNameTextLines = new ArrayList<>();
+         List<String> componentVersionTextLines = new ArrayList<>();
+         List<String> componentLicenseTextLines = new ArrayList<>();
+
+        if(StringUtils.isNotBlank(component.getComponentName())) {
+            componentNameTextLines = StringManager.wrapToCombinedList(component.getComponentName(), Math.round(componentNameWidth));
+        }
+        if(StringUtils.isNotBlank(component.getComponentVersion())) {
+            componentVersionTextLines = StringManager.wrapToCombinedList(component.getComponentVersion(), Math.round(componentNameWidth));
+        }
+        if(StringUtils.isNotBlank(component.getLicense())) {
+            componentLicenseTextLines = StringManager.wrapToCombinedList(component.getLicense(), Math.round(componentNameWidth));
+        }
 
         float rowHeight = pdfManager.getApproximateWrappedStringHeight(componentNameTextLines.size(), PDFBoxManager.DEFAULT_FONT_SIZE);
         final float componentVersionHeight = pdfManager.getApproximateWrappedStringHeight(componentVersionTextLines.size(), PDFBoxManager.DEFAULT_FONT_SIZE);
@@ -206,8 +219,16 @@ public class RiskReportPdfWriter {
         if (StringUtils.isNotBlank(component.getPolicyStatus()) && component.getPolicyStatus().equalsIgnoreCase("IN_VIOLATION")) {
             pdfManager.drawImageCentered(15, rowUpperY, 8, 8, 0, rowHeight, "/riskreport/web/images/cross_through_circle.png");
         }
-        pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, component.getComponentURL(), PDFBoxManager.DEFAULT_COLOR);
-        pdfManager.writeWrappedCenteredLink(210, rowUpperY, componentVersionWidth, rowHeight, componentVersionTextLines, component.getComponentVersionURL(), PDFBoxManager.DEFAULT_COLOR);
+        String componentURL = "";
+        if(StringUtils.isNotBlank(component.getComponentURL())) {
+            componentURL = component.getComponentURL();
+        }
+        String componentVersionURL = "";
+        if(StringUtils.isNotBlank(component.getComponentVersionURL())) {
+            componentVersionURL = component.getComponentVersionURL();
+        }
+        pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, componentURL, PDFBoxManager.DEFAULT_COLOR);
+        pdfManager.writeWrappedCenteredLink(210, rowUpperY, componentVersionWidth, rowHeight, componentVersionTextLines, componentVersionURL, PDFBoxManager.DEFAULT_COLOR);
 
         final Risk licenseRisk = getLicenseRisk(component, rowColor);
 
@@ -217,6 +238,7 @@ public class RiskReportPdfWriter {
         }
 
         pdfManager.writeWrappedVerticalCenteredText(290, rowUpperY, componentLicenseWidth, rowHeight, componentLicenseTextLines);
+
         pdfManager.writeTextCentered(434, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskHighCount()));
         pdfManager.writeTextCentered(477, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskMediumCount()));
         pdfManager.writeTextCentered(520, rowUpperY, rowHeight, String.valueOf(component.getSecurityRiskLowCount()));
