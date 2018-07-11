@@ -71,7 +71,7 @@ public class RiskReportPdfWriter {
         document.getDocumentInformation().setCreator("Integrations");
         document.getDocumentInformation().setSubject("Hub Risk Report");
 
-        try (PDFBoxManager pdfManager = new PDFBoxManager(logger, pdfFile, document)) {
+        try (PDFBoxManager pdfManager = new PDFBoxManager(pdfFile, document)) {
             this.pdfManager = pdfManager;
             final PDRectangle pageBox = pdfManager.currentPage.getMediaBox();
             final float pageWidth = pageBox.getWidth();
