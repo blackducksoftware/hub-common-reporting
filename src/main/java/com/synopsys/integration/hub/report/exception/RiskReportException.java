@@ -21,26 +21,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report.api;
+package com.synopsys.integration.hub.report.exception;
 
-public class PolicyRule {
-    private String name;
-    private String description;
-
-    public String getName() {
-        return name;
+public class RiskReportException extends Exception {
+    public RiskReportException() {
+        super();
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public RiskReportException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public String getDescription() {
-        return description;
+    public RiskReportException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 
-    public void setDescription(final String description) {
-        this.description = description;
+    public RiskReportException(final String message) {
+        super(message);
+    }
+
+    public RiskReportException(final Throwable cause) {
+        super(cause);
     }
 
 }

@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report;
+package com.synopsys.integration.hub.report;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.blackducksoftware.integration.pdf.JarResourceCopier;
+import com.synopsys.integration.pdf.JarResourceCopier;
 
 public class RiskReportResourceCopier extends JarResourceCopier {
     public final static String JSON_TOKEN_TO_REPLACE = "TOKEN_RISK_REPORT_JSON_TOKEN";

@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report;
+package com.synopsys.integration.hub.report;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -30,11 +30,11 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.blackducksoftware.integration.hub.report.api.ReportData;
-import com.blackducksoftware.integration.hub.report.pdf.RiskReportPdfWriter;
-import com.blackducksoftware.integration.log.LogLevel;
-import com.blackducksoftware.integration.log.PrintStreamIntLogger;
 import com.google.gson.Gson;
+import com.synopsys.integration.hub.report.api.ReportData;
+import com.synopsys.integration.hub.report.pdf.RiskReportPdfWriter;
+import com.synopsys.integration.log.LogLevel;
+import com.synopsys.integration.log.PrintStreamIntLogger;
 
 public class PDFBoxTest {
 

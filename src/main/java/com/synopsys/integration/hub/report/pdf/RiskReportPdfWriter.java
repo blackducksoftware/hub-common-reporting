@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.blackducksoftware.integration.hub.report.pdf;
+package com.synopsys.integration.hub.report.pdf;
 
 import static java.awt.Color.decode;
 
@@ -36,13 +36,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
-import com.blackducksoftware.integration.hub.report.api.BomComponent;
-import com.blackducksoftware.integration.hub.report.api.ReportData;
-import com.blackducksoftware.integration.hub.report.exception.RiskReportException;
-import com.blackducksoftware.integration.log.IntLogger;
-import com.blackducksoftware.integration.pdf.PDFBoxManager;
-import com.blackducksoftware.integration.pdf.StringManager;
-import com.blackducksoftware.integration.util.IntegrationEscapeUtil;
+import com.synopsys.integration.hub.report.api.BomComponent;
+import com.synopsys.integration.hub.report.api.ReportData;
+import com.synopsys.integration.hub.report.exception.RiskReportException;
+import com.synopsys.integration.log.IntLogger;
+import com.synopsys.integration.pdf.PDFBoxManager;
+import com.synopsys.integration.pdf.StringManager;
+import com.synopsys.integration.util.IntegrationEscapeUtil;
 
 public class RiskReportPdfWriter {
     private final IntLogger logger;
@@ -66,7 +66,7 @@ public class RiskReportPdfWriter {
         if (pdfFile.exists()) {
             pdfFile.delete();
         }
-        PDDocument document = new PDDocument();
+        final PDDocument document = new PDDocument();
         document.getDocumentInformation().setAuthor("Black Duck Software");
         document.getDocumentInformation().setCreator("Integrations");
         document.getDocumentInformation().setSubject("Hub Risk Report");
@@ -168,7 +168,7 @@ public class RiskReportPdfWriter {
 
         boolean isOdd = false;
         for (final BomComponent component : reportData.getComponents()) {
-            if(null != component) {
+            if (null != component) {
                 rowRectangle = writeComponentRow(pageWidth, rowRectangle.getLowerLeftY(), component, isOdd);
                 isOdd = !isOdd;
             }
@@ -182,17 +182,17 @@ public class RiskReportPdfWriter {
         final float componentVersionWidth = 115F;
         final float componentLicenseWidth = 150F;
 
-         List<String> componentNameTextLines = new ArrayList<>();
-         List<String> componentVersionTextLines = new ArrayList<>();
-         List<String> componentLicenseTextLines = new ArrayList<>();
+        List<String> componentNameTextLines = new ArrayList<>();
+        List<String> componentVersionTextLines = new ArrayList<>();
+        List<String> componentLicenseTextLines = new ArrayList<>();
 
-        if(StringUtils.isNotBlank(component.getComponentName())) {
+        if (StringUtils.isNotBlank(component.getComponentName())) {
             componentNameTextLines = StringManager.wrapToCombinedList(component.getComponentName(), Math.round(componentNameWidth));
         }
-        if(StringUtils.isNotBlank(component.getComponentVersion())) {
+        if (StringUtils.isNotBlank(component.getComponentVersion())) {
             componentVersionTextLines = StringManager.wrapToCombinedList(component.getComponentVersion(), Math.round(componentNameWidth));
         }
-        if(StringUtils.isNotBlank(component.getLicense())) {
+        if (StringUtils.isNotBlank(component.getLicense())) {
             componentLicenseTextLines = StringManager.wrapToCombinedList(component.getLicense(), Math.round(componentNameWidth));
         }
 
@@ -220,11 +220,11 @@ public class RiskReportPdfWriter {
             pdfManager.drawImageCentered(15, rowUpperY, 8, 8, 0, rowHeight, "/riskreport/web/images/cross_through_circle.png");
         }
         String componentURL = "";
-        if(StringUtils.isNotBlank(component.getComponentURL())) {
+        if (StringUtils.isNotBlank(component.getComponentURL())) {
             componentURL = component.getComponentURL();
         }
         String componentVersionURL = "";
-        if(StringUtils.isNotBlank(component.getComponentVersionURL())) {
+        if (StringUtils.isNotBlank(component.getComponentVersionURL())) {
             componentVersionURL = component.getComponentVersionURL();
         }
         pdfManager.writeWrappedVerticalCenteredLink(30F, rowUpperY, componentNameWidth, rowHeight, componentNameTextLines, componentURL, PDFBoxManager.DEFAULT_COLOR);
