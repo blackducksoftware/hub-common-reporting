@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.synopsys.integration.hub.report.pdf;
+package com.synopsys.integration.blackduck.report.pdf;
 
 import static java.awt.Color.decode;
 
@@ -36,9 +36,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
-import com.synopsys.integration.hub.report.api.BomComponent;
-import com.synopsys.integration.hub.report.api.ReportData;
-import com.synopsys.integration.hub.report.exception.RiskReportException;
+import com.synopsys.integration.blackduck.report.api.BomComponent;
+import com.synopsys.integration.blackduck.report.api.ReportData;
+import com.synopsys.integration.blackduck.report.exception.RiskReportException;
 import com.synopsys.integration.log.IntLogger;
 import com.synopsys.integration.pdf.PDFBoxManager;
 import com.synopsys.integration.pdf.StringManager;

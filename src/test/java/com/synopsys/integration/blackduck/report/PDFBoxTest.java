@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.synopsys.integration.hub.report;
+package com.synopsys.integration.blackduck.report;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -31,8 +31,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.synopsys.integration.hub.report.api.ReportData;
-import com.synopsys.integration.hub.report.pdf.RiskReportPdfWriter;
+import com.synopsys.integration.blackduck.report.api.ReportData;
+import com.synopsys.integration.blackduck.report.pdf.RiskReportPdfWriter;
 import com.synopsys.integration.log.LogLevel;
 import com.synopsys.integration.log.PrintStreamIntLogger;
 

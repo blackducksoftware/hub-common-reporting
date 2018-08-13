@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.synopsys.integration.hub.report.api;
+package com.synopsys.integration.blackduck.report.api;
 
 public class PolicyRule {
     private String name;

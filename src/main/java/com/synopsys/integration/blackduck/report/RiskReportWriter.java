@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.synopsys.integration.hub.report;
+package com.synopsys.integration.blackduck.report;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +31,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
-import com.synopsys.integration.hub.report.api.ReportData;
-import com.synopsys.integration.hub.report.exception.RiskReportException;
+import com.synopsys.integration.blackduck.report.api.ReportData;
+import com.synopsys.integration.blackduck.report.exception.RiskReportException;
 
 public class RiskReportWriter {
 

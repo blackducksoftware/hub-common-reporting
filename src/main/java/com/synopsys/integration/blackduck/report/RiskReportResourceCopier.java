@@ -21,7 +21,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.synopsys.integration.hub.report;
+package com.synopsys.integration.blackduck.report;
 
 import java.io.File;
 import java.io.IOException;
