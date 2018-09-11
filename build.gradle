@@ -12,5 +12,5 @@ version = '7.0.4-SNAPSHOT'
 apply plugin: 'com.blackducksoftware.integration.library'
 
 dependencies {
-    compile 'com.blackducksoftware.integration:integration-reporting:0.1.3'
+    compile 'com.blackducksoftware.integration:integration-reporting:0.1.4'
 }
